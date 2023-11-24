@@ -20,11 +20,13 @@
 	"devDependencies": {
 		"@trivago/prettier-plugin-sort-imports": "^4.1.1",
 		"@types/express": "^4.17.17",
+		"@types/morgan": "^1.9.9",
 		"@typescript-eslint/eslint-plugin": "^5.59.8",
 		"@typescript-eslint/parser": "^5.59.8",
 		"eslint": "^8.41.0",
 		"eslint-config-prettier": "^8.8.0",
 		"eslint-plugin-prettier": "^4.2.1",
+		"morgan": "^1.10.0",
 		"prettier": "^2.8.8",
 		"ts-node": "^10.9.1",
 		"ts-node-dev": "^2.0.0",
