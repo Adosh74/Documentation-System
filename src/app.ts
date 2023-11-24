@@ -1,12 +1,14 @@
 import express, { Request, Response } from 'express';
 import morgan from 'morgan';
+import envConfig from './config/env.config';
 
 export const app = express();
 
 //middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan('dev'));
+
+if (envConfig.env === 'development') app.use(morgan('dev'));
 
 // root route
 app.get('/', (req, res) => {
