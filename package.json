@@ -1,5 +1,5 @@
 {
-	"name": "Node-Env",
+	"name": "documentation-system",
 	"version": "1.0.0",
 	"description": "students grades",
 	"main": "server.ts",
@@ -28,6 +28,6 @@
 		"prettier": "^2.8.8",
 		"ts-node": "^10.9.1",
 		"ts-node-dev": "^2.0.0",
-		"typescript": "^5.0.4"
+		"typescript": "^5.3.2"
 	}
 }
