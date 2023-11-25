@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import envConfig from './config/env.config';
@@ -5,6 +6,7 @@ import envConfig from './config/env.config';
 export const app = express();
 
 //middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
