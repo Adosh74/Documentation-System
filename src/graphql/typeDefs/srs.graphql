@@ -1,0 +1,30 @@
+type Srs {
+	intro: String!
+	purpose: String!
+	intended_audience: String!
+	description: String!
+	requirements: String!
+	use_case: String!
+	projectId: String
+}
+
+type Query {
+	srs(id: String!): Srs
+	srsList: [Srs]
+}
+
+input SrsInput {
+	intro: String!
+	purpose: String!
+	intended_audience: String!
+	description: String!
+	requirements: String!
+	use_case: String!
+	projectId: String
+}
+
+type Mutation {
+	createSrs(input: SrsInput!): Srs
+	updateSrs(id: String!, input: SrsInput!): Srs
+	deleteSrs(id: String!): Srs
+}
