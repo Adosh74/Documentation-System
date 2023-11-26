@@ -1,0 +1,20 @@
+type Sdd {
+	uml: [String]!
+	projectId: String!
+}
+
+type Query {
+	sdds: [Sdd]
+	sdd(id: String!): Sdd
+}
+
+input SddInput {
+	uml: [String]!
+	projectId: String!
+}
+
+type Mutation {
+	createSdd(sdd: SddInput!): Sdd
+	updateSdd(id: String!, sdd: SddInput!): Sdd
+	deleteSdd(id: String!): Sdd
+}
