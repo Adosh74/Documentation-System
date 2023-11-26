@@ -1,0 +1,33 @@
+type Project {
+	id: String!
+	title: String!
+	startIn: String!
+	endIn: String!
+	objectives: String!
+	project_manager: String!
+	budget: Int!
+	scope: String
+	srss: [Srs]
+	sdds: [Sdd]
+}
+
+type Query {
+	project(id: String!): Project
+	projects: [Project]
+}
+
+input ProjectInput {
+	title: String!
+	startIn: String!
+	endIn: String!
+	objectives: String!
+	project_manager: String!
+	budget: Int!
+	scope: String
+}
+
+type Mutation {
+	createProject(input: ProjectInput): Project
+	updateProject(id: String!, input: ProjectInput): Project
+	deleteProject(id: String!): Project
+}
