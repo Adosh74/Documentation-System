@@ -10,6 +10,16 @@ interface GetProjectArgs extends GetProjectsArgs {
 	id: string;
 }
 
+interface ProjectInput {
+	title: string;
+	startIn: Date;
+	endIn: Date;
+	objectives: string;
+	project_manager: string;
+	budget: number;
+	scope: string;
+}
+
 const prisma = new PrismaClient();
 
 export const getProjects = async ({ info }: GetProjectsArgs) => {
@@ -51,4 +61,28 @@ export const getProject = async ({ id, info }: GetProjectArgs) => {
 		});
 
 	return await prisma.project.findUnique({ where: { id } });
+};
+
+export const createProject = async ({
+	title,
+	startIn,
+	endIn,
+	objectives,
+	budget,
+	project_manager,
+	scope,
+}: ProjectInput) => {
+	const createdProject = await prisma.project.create({
+		data: {
+			title,
+			startIn,
+			endIn,
+			objectives,
+			budget,
+			project_manager,
+			scope,
+		},
+	});
+
+	return createdProject;
 };
