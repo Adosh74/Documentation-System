@@ -20,12 +20,25 @@ model Project {
   project_manager String
   budget          Int
   scope           String   @default("local")
+  srss             SRS[]
+  sdds             SDD[]
 }
 
 model SRS {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  project     Project  @relation(fields: [projectId], references: [id])
-  projectId   String
+  id                  String    @id @default(uuid())
+  intro               String
+  purpose             String
+  intended_audience   String
+  description         String
+  requirements        String
+  use_case            String
+  project             Project  @relation(fields: [projectId], references: [id])
+  projectId           String
+}
+
+model SDD{
+  id                 String    @id @default(uuid())
+  uml                String[]
+  project            Project  @relation(fields: [projectId], references: [id])
+  projectId          String
 }
