@@ -13,21 +13,23 @@ const server = new ApolloServer({
 	resolvers,
 });
 
-//middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+server.start().then(() => {
+	//middleware
+	app.use(cors());
+	app.use(express.json());
+	app.use(express.urlencoded({ extended: true }));
 
-if (envConfig.env === 'development') app.use(morgan('dev'));
+	if (envConfig.env === 'development') app.use(morgan('dev'));
 
-// root route
-app.use('/graphql', expressMiddleware(server));
+	// root route
+	app.use('/graphql', expressMiddleware(server));
 
-app.get('/', (req: Request, res: Response) => {
-	res.send('Documentation system for the API(GraphQL)');
+	app.get('/', (req: Request, res: Response) => {
+		res.send('Documentation system for the API(GraphQL)');
+	});
+
+	// monitor the health of the application
+	app.get('/healthz', (req: Request, res: Response) =>
+		res.status(200).json({ success: true, message: 'Ok' })
+	);
 });
-
-// monitor the health of the application
-app.get('/healthz', (req: Request, res: Response) =>
-	res.status(200).json({ success: true, message: 'Ok' })
-);
