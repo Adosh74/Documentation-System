@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { getProject, getProjects } from '../services/project.service';
+import { createProject, getProject, getProjects } from '../services/project.service';
 
 export const projectResolver = {
 	Query: {
@@ -24,8 +24,16 @@ export const projectResolver = {
 	},
 	Mutation: {
 		// 3.resolver for the createProject mutation
-		async createProject() {
-			null;
+		async createProject(_: any, { input }: Record<string, any>) {
+			return await createProject({
+				title: input.title,
+				startIn: input.startIn,
+				endIn: input.endIn,
+				objectives: input.objectives,
+				budget: input.budget,
+				project_manager: input.project_manager,
+				scope: input.scope,
+			});
 		},
 		// 4.resolver for the updateProject mutation
 		async updateProject() {
