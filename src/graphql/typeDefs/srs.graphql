@@ -11,7 +11,7 @@ type Srs {
 
 type Query {
 	srs(id: String!): Srs
-	srsList: [Srs]
+	srss: [Srs]
 }
 
 input SrsInput {
