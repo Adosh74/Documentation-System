@@ -43,6 +43,8 @@ export const getSdd = async ({ id, info }: GetSddArgs) => {
 
 /// ***  3. create a sdd *** ///
 export const createSdd = async ({ uml, projectId }: SddInput) => {
+	console.log('input', uml, projectId);
+
 	const sdd = await prisma.sDD.create({
 		data: {
 			uml,

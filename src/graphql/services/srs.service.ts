@@ -10,6 +10,16 @@ interface GetSrsArgs extends GetSrssArgs {
 	id: string;
 }
 
+interface SrsInput {
+	intro: string;
+	purpose: string;
+	intended_audience: string;
+	description: string;
+	requirements: string;
+	use_case: string;
+	projectId: string;
+}
+
 const prisma = new PrismaClient();
 
 // *** 1. get all srs service *** //
@@ -36,4 +46,28 @@ export const getSrs = async ({ id, info }: GetSrsArgs) => {
 	return await prisma.sRS.findUnique({
 		where: { id },
 	});
+};
+
+// *** 3. create srs service *** //
+export const createSrs = async ({
+	intro,
+	purpose,
+	intended_audience,
+	description,
+	requirements,
+	use_case,
+	projectId,
+}: SrsInput) => {
+	const createdSrs = await prisma.sRS.create({
+		data: {
+			intro,
+			purpose,
+			intended_audience,
+			description,
+			requirements,
+			use_case,
+			projectId,
+		},
+	});
+	return createdSrs;
 };
