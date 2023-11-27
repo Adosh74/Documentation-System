@@ -40,3 +40,14 @@ export const getSdd = async ({ id, info }: GetSddArgs) => {
 
 	return await prisma.sDD.findUnique({ where: { id } });
 };
+
+/// ***  3. create a sdd *** ///
+export const createSdd = async ({ uml, projectId }: SddInput) => {
+	const sdd = await prisma.sDD.create({
+		data: {
+			uml,
+			projectId,
+		},
+	});
+	return sdd;
+};
