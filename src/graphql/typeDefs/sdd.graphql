@@ -2,6 +2,7 @@ type Sdd {
 	id: String!
 	uml: [String]!
 	project: Project
+	projectId: String!
 }
 
 type Query {
@@ -16,8 +17,13 @@ input SddInput {
 	project: ProjectInput
 }
 
+input CreateSddInput {
+	uml: [String]!
+	projectId: String!
+}
+
 type Mutation {
-	createSdd(sdd: SddInput!): Sdd
+	createSdd(input: CreateSddInput!): Sdd
 	updateSdd(id: String!, sdd: SddInput!): Sdd
 	deleteSdd(id: String!): Sdd
 }
