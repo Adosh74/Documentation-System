@@ -3,6 +3,7 @@
 1. [Introduction](#introduction)
 2. [Core Features](#core-features)
 3. [Technologies and Tools](#technologies-and-tools)
+4. [ERD](/docs/ERD.md)
 
 ## Introduction
 
