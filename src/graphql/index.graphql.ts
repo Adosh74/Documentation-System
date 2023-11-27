@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { projectResolver } from './resolvers/project.resolver';
+import { sddResolver } from './resolvers/sdd.resolver';
 
 // read the typeDefs from the typeDefs folder
 const projectType = fs.readFileSync(
@@ -19,6 +20,7 @@ export const typeDefs = `
 export const resolvers = {
 	Query: {
 		...projectResolver.Query,
+		...sddResolver.Query,
 	},
 	Mutation: {
 		...projectResolver.Mutation,
