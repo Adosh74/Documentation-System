@@ -6,7 +6,7 @@ type Srs {
 	description: String!
 	requirements: String!
 	use_case: String!
-	projectId: String
+	project: Project
 }
 
 type Query {
@@ -23,6 +23,7 @@ input SrsInput {
 	requirements: String!
 	use_case: String!
 	projectId: String
+	project: ProjectInput
 }
 
 type Mutation {

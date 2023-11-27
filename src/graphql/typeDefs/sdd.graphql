@@ -1,7 +1,7 @@
 type Sdd {
 	id: String!
 	uml: [String]!
-	projectId: String!
+	project: Project
 }
 
 type Query {
@@ -13,6 +13,7 @@ input SddInput {
 	id: String!
 	uml: [String]!
 	projectId: String!
+	project: ProjectInput
 }
 
 type Mutation {
