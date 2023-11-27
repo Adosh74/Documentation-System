@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { getSdd, getSdds } from '../services/sdd.service';
+import { createSdd, getSdd, getSdds } from '../services/sdd.service';
 
 export const sddResolver = {
 	Query: {
@@ -21,6 +21,16 @@ export const sddResolver = {
 			info: GraphQLResolveInfo
 		) {
 			return getSdd({ id: args.id, info });
+		},
+	},
+
+	Mutation: {
+		// 3.resolver for the createSdd mutation
+		async createSdd(_: any, { input }: Record<string, any>) {
+			return await createSdd({
+				uml: input.uml,
+				projectId: input.projectId,
+			});
 		},
 	},
 };
