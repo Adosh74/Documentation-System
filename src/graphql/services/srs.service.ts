@@ -12,6 +12,7 @@ interface GetSrsArgs extends GetSrssArgs {
 
 const prisma = new PrismaClient();
 
+// *** 1. get all srs service *** //
 export const getSrss = async ({ info }: GetSrssArgs) => {
 	const extractedSelections = extractSelections(info);
 	const projectIncluded = extractedSelections.includes('project');
@@ -21,6 +22,7 @@ export const getSrss = async ({ info }: GetSrssArgs) => {
 	return await prisma.sRS.findMany();
 };
 
+// *** 2. get srs by id service *** //
 export const getSrs = async ({ id, info }: GetSrsArgs) => {
 	const extractedSelections = extractSelections(info);
 	const projectIncluded = extractedSelections.includes('project');
