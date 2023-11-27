@@ -17,6 +17,7 @@ type Query {
 }
 
 input ProjectInput {
+	id: String!
 	title: String!
 	startIn: String!
 	endIn: String!

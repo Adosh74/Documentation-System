@@ -1,4 +1,5 @@
 type Srs {
+	id: String!
 	intro: String!
 	purpose: String!
 	intended_audience: String!
@@ -14,6 +15,7 @@ type Query {
 }
 
 input SrsInput {
+	id: String!
 	intro: String!
 	purpose: String!
 	intended_audience: String!
