@@ -11,13 +11,13 @@ interface GetProjectArgs extends GetProjectsArgs {
 }
 
 interface ProjectInput {
-	title: string;
-	startIn: Date;
-	endIn: Date;
-	objectives: string;
-	project_manager: string;
-	budget: number;
-	scope: string;
+	title?: string;
+	startIn?: Date;
+	endIn?: Date;
+	objectives?: string;
+	project_manager?: string;
+	budget?: number;
+	scope?: string;
 }
 
 interface UpdateProjectInput extends ProjectInput {
@@ -119,4 +119,15 @@ export const updateProject = async ({
 	});
 
 	return updatedProject;
+};
+
+/// *** 5. Delete project service *** //
+export const deleteProject = async (id: string) => {
+	const deletedProject = await prisma.project.delete({ where: { id } });
+
+	// delete all srs and sdds related to the project
+	await prisma.sRS.deleteMany({ where: { projectId: id } });
+	await prisma.sDD.deleteMany({ where: { projectId: id } });
+
+	return deletedProject;
 };
