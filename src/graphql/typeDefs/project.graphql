@@ -24,11 +24,32 @@ input ProjectInput {
 	objectives: String!
 	project_manager: String!
 	budget: Int!
+	scope: String!
+}
+
+input CreateProjectInput {
+	title: String!
+	startIn: String!
+	endIn: String!
+	objectives: String!
+	project_manager: String!
+	budget: Int!
+	scope: String!
+}
+
+input ProjectUpdateInput {
+	id: String!
+	title: String
+	startIn: String
+	endIn: String
+	objectives: String
+	project_manager: String
+	budget: Int
 	scope: String
 }
 
 type Mutation {
 	createProject(input: ProjectInput): Project
-	updateProject(id: String!, input: ProjectInput): Project
+	updateProject(id: String!, input: ProjectUpdateInput): Project
 	deleteProject(id: String!): Project
 }

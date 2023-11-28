@@ -32,7 +32,7 @@ input CreateSrsInput {
 	intended_audience: String!
 	description: String!
 	requirements: String!
-	use_case: String!
+	use_case: Upload!
 	projectId: String
 }
 
