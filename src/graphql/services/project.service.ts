@@ -85,8 +85,8 @@ export const createProject = async ({
 			startIn,
 			endIn,
 			objectives,
-			budget,
 			project_manager,
+			budget,
 			scope,
 		},
 	});
@@ -123,11 +123,12 @@ export const updateProject = async ({
 
 /// *** 5. Delete project service *** //
 export const deleteProject = async (id: string) => {
-	const deletedProject = await prisma.project.delete({ where: { id } });
-
+	console.log('id', id);
 	// delete all srs and sdds related to the project
 	await prisma.sRS.deleteMany({ where: { projectId: id } });
 	await prisma.sDD.deleteMany({ where: { projectId: id } });
+
+	const deletedProject = await prisma.project.delete({ where: { id } });
 
 	return deletedProject;
 };
