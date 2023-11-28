@@ -15,6 +15,11 @@ interface SddInput {
 	projectId: string;
 }
 
+interface UpdateSddInput {
+	id: string;
+	uml: [string];
+}
+
 const prisma = new PrismaClient();
 
 /// ***  1. get all sdds *** ///
@@ -51,5 +56,22 @@ export const createSdd = async ({ uml, projectId }: SddInput) => {
 			projectId,
 		},
 	});
+	return sdd;
+};
+
+/// ***  4. update a sdd *** ///
+export const updateSdd = async ({ id, uml }: UpdateSddInput) => {
+	const sdd = await prisma.sDD.update({
+		where: { id },
+		data: {
+			uml,
+		},
+	});
+	return sdd;
+};
+
+/// ***  5. delete a sdd *** ///
+export const deleteSdd = async ({ id }: GetSddArgs) => {
+	const sdd = await prisma.sDD.delete({ where: { id } });
 	return sdd;
 };
