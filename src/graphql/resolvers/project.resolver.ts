@@ -1,6 +1,7 @@
 import { GraphQLResolveInfo } from 'graphql';
 import {
 	createProject,
+	deleteProject,
 	getProject,
 	getProjects,
 	updateProject,
@@ -54,8 +55,8 @@ export const projectResolver = {
 			});
 		},
 		// 5.resolver for the deleteProject mutation
-		async deleteProject() {
-			null;
+		async deleteProject(_: any, { id }: Record<string, any>) {
+			return await deleteProject(id);
 		},
 	},
 };
