@@ -1,5 +1,11 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { createSdd, getSdd, getSdds } from '../services/sdd.service';
+import {
+	createSdd,
+	deleteSdd,
+	getSdd,
+	getSdds,
+	updateSdd,
+} from '../services/sdd.service';
 
 export const sddResolver = {
 	Query: {
@@ -31,6 +37,19 @@ export const sddResolver = {
 				uml: input.uml,
 				projectId: input.projectId,
 			});
+		},
+
+		// *** 4.resolver for the updateSdd mutation *** //
+		async updateSdd(_: any, { id, input }: Record<string, any>) {
+			return await updateSdd({
+				id,
+				uml: input.uml,
+			});
+		},
+
+		// *** 5.resolver for the deleteSdd mutation *** //
+		async deleteSdd(_: any, { id }: Record<string, any>) {
+			return await deleteSdd({ id });
 		},
 	},
 };
