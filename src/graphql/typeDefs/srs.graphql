@@ -36,8 +36,17 @@ input CreateSrsInput {
 	projectId: String
 }
 
+input UpdateSrsInput {
+	intro: String
+	purpose: String
+	intended_audience: String
+	description: String
+	requirements: String
+	use_case: String
+}
+
 type Mutation {
 	createSrs(input: CreateSrsInput!): Srs
-	updateSrs(id: String!, input: SrsInput!): Srs
+	updateSrs(id: String!, input: UpdateSrsInput!): Srs
 	deleteSrs(id: String!): Srs
 }
