@@ -22,8 +22,12 @@ input CreateSddInput {
 	projectId: String!
 }
 
+input UpdateSddInput {
+	uml: [String]!
+}
+
 type Mutation {
 	createSdd(input: CreateSddInput!): Sdd
-	updateSdd(id: String!, sdd: SddInput!): Sdd
+	updateSdd(id: String!, sdd: UpdateSddInput!): Sdd
 	deleteSdd(id: String!): Sdd
 }
