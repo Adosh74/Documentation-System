@@ -43,9 +43,12 @@ export const srsResolver = {
 		},
 
 		// *** 4.resolver for the updateSrs mutation *** //
-		async updateSrs(_: any, { input }: Record<string, any>) {
+		async updateSrs(_: any, { id, input }: Record<string, any>) {
+			console.log('id', id);
+			console.log('input', input);
+
 			return await updateSrs({
-				id: input.id,
+				id: id,
 				intro: input.intro,
 				purpose: input.purpose,
 				intended_audience: input.intended_audience,
