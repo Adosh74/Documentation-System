@@ -49,7 +49,7 @@ export const sddResolver = {
 
 		// *** 5.resolver for the deleteSdd mutation *** //
 		async deleteSdd(_: any, { id }: Record<string, any>) {
-			return await deleteSdd({ id });
+			return await deleteSdd(id);
 		},
 	},
 };
