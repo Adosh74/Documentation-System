@@ -71,7 +71,7 @@ export const updateSdd = async ({ id, uml }: UpdateSddInput) => {
 };
 
 /// ***  5. delete a sdd *** ///
-export const deleteSdd = async ({ id }: GetSddArgs) => {
+export const deleteSdd = async (id: string) => {
 	const sdd = await prisma.sDD.delete({ where: { id } });
 	return sdd;
 };
