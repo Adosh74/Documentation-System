@@ -20,8 +20,14 @@ interface SrsInput {
 	projectId: string;
 }
 
-interface UpdateSrsInput extends SrsInput {
+interface UpdateSrsInput {
 	id: string;
+	intro: string;
+	purpose: string;
+	intended_audience: string;
+	description: string;
+	requirements: string;
+	use_case: string;
 }
 
 const prisma = new PrismaClient();
