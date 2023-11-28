@@ -1,5 +1,11 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { createSrs, getSrs, getSrss } from '../services/srs.service';
+import {
+	createSrs,
+	deleteSrs,
+	getSrs,
+	getSrss,
+	updateSrs,
+} from '../services/srs.service';
 
 export const srsResolver = {
 	Query: {
@@ -34,6 +40,24 @@ export const srsResolver = {
 				use_case: input.use_case,
 				projectId: input.projectId,
 			});
+		},
+
+		// *** 4.resolver for the updateSrs mutation *** //
+		async updateSrs(_: any, { input }: Record<string, any>) {
+			return await updateSrs({
+				id: input.id,
+				intro: input.intro,
+				purpose: input.purpose,
+				intended_audience: input.intended_audience,
+				description: input.description,
+				requirements: input.requirements,
+				use_case: input.use_case,
+			});
+		},
+
+		// *** 5.resolver for the deleteSrs mutation *** //
+		async deleteSrs(_: any, { id }: Record<string, any>) {
+			return await deleteSrs(id);
 		},
 	},
 };
