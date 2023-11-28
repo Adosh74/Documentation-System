@@ -12,12 +12,12 @@ datasource db {
 
 model Project {
   id              String   @id @default(uuid())
-  title           String
+  title           String   @default("No title")
   startIn         DateTime @default(now())
   endIn           DateTime @default(now())
-  objectives      String
-  project_manager String
-  budget          Int
+  objectives      String   @default("No objectives")
+  project_manager String   @default("No project manager")
+  budget          Int      @default(0)
   scope           String   @default("local")
   srss            SRS[]
   sdds            SDD[]
