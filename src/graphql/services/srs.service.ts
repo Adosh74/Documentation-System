@@ -20,6 +20,10 @@ interface SrsInput {
 	projectId: string;
 }
 
+interface UpdateSrsInput extends SrsInput {
+	id: string;
+}
+
 const prisma = new PrismaClient();
 
 // *** 1. get all srs service *** //
@@ -70,4 +74,36 @@ export const createSrs = async ({
 		},
 	});
 	return createdSrs;
+};
+
+// *** 4. update srs service *** //
+export const updateSrs = async ({
+	id,
+	intro,
+	purpose,
+	intended_audience,
+	description,
+	requirements,
+	use_case,
+}: UpdateSrsInput) => {
+	const updatedSrs = await prisma.sRS.update({
+		where: { id },
+		data: {
+			intro,
+			purpose,
+			intended_audience,
+			description,
+			requirements,
+			use_case,
+		},
+	});
+	return updatedSrs;
+};
+
+// *** 5. delete srs service *** //
+export const deleteSrs = async (id: string) => {
+	const deletedSrs = await prisma.sRS.delete({
+		where: { id },
+	});
+	return deletedSrs;
 };
