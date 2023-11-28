@@ -20,8 +20,13 @@ interface ProjectInput {
 	scope: string;
 }
 
+interface UpdateProjectInput extends ProjectInput {
+	id: string;
+}
+
 const prisma = new PrismaClient();
 
+// *** 1. Get all projects service *** //
 export const getProjects = async ({ info }: GetProjectsArgs) => {
 	const extractedSelections = extractSelections(info);
 	const srsIncluded = extractedSelections.includes('srss');
@@ -37,6 +42,7 @@ export const getProjects = async ({ info }: GetProjectsArgs) => {
 	return await prisma.project.findMany();
 };
 
+// *** 2. Get project by id service *** //
 export const getProject = async ({ id, info }: GetProjectArgs) => {
 	const extractedSelections = extractSelections(info);
 	const srsIncluded = extractedSelections.includes('srss');
@@ -63,6 +69,7 @@ export const getProject = async ({ id, info }: GetProjectArgs) => {
 	return await prisma.project.findUnique({ where: { id } });
 };
 
+// *** 3. Create project service *** //
 export const createProject = async ({
 	title,
 	startIn,
@@ -85,4 +92,31 @@ export const createProject = async ({
 	});
 
 	return createdProject;
+};
+
+// *** 4. Update project service *** //
+export const updateProject = async ({
+	id,
+	title,
+	startIn,
+	endIn,
+	objectives,
+	budget,
+	project_manager,
+	scope,
+}: UpdateProjectInput) => {
+	const updatedProject = await prisma.project.update({
+		where: { id },
+		data: {
+			title,
+			startIn,
+			endIn,
+			objectives,
+			budget,
+			project_manager,
+			scope,
+		},
+	});
+
+	return updatedProject;
 };
