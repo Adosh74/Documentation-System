@@ -25,9 +25,10 @@ This app is where you will store your Software Development Life Cycle Documentat
 
 -   Node.js
 -   Express.js
+-   TypeScript
 -   GraphQL
 -   Apollo Server
 -   Apollo Client
 -   PostgreSQL
 -   Prisma
--   React
+-   Next.js
