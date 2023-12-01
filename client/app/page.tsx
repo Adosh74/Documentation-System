@@ -2,6 +2,8 @@
 
 import Header from "@/components/Header";
 import styles from"./page.module.css"
+import { AppProps } from 'next/app';
+import { Component } from "react";
 
 function Home() {
   

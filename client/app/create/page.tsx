@@ -1,13 +1,17 @@
+"use client"
 import Header from "@/components/Header";
 import styles from "./page.module.css";
+import { useReducer } from 'react';
+import ChoosePhase from "@/components/ChoosePhase";
 function create() {
     
-  return (<>
-    <Header />
-  < div className="p-5 text-center bg-image">
+  return (
+    <>
+       <Header />
+       <ChoosePhase/>
+
+  < div >
     <div  className={styles.section}>
-      
-    <h1>show</h1>
     </div>
     </div>
     </>

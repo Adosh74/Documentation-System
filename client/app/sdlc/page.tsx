@@ -1,14 +1,17 @@
+import Header from "@/components/Header";
 import Link from "next/link";
-
+import InitiationPhase from "@/components/Initiation";
 export const metadata ={title:"SDLC"}
+import { useRouter } from 'next/router';
 
-function sdlc() {
+ const sdlc:React.FC = ()=> {
   return (
     <>
-      <h1>SDLC Page</h1>
-    
+      <Header/>
+      
     </>
   );
 }
 
 export default sdlc;
+

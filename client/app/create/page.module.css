@@ -1,13 +1,11 @@
 .section{
-    background-image: url('https://mdbcdn.b-cdn.net/img/new/slides/041.webp');
-    height: 400px;
     background-size: cover;
     background-position: center;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;    
+    color: #ffffff; 
       
 }
 

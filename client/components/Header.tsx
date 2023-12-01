@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-
+import styles from "./Styles.module.css"
 
 const Header = () => {
 
   return (
     <header className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
+        <i className="fa-solid fa-laptop-code"></i>
         <Link href="/"
-           className="navbar-brand">Documentation System
+           className="navbar-brand" style={{fontSize:"100",fontWeight:"700"}}>Documentation System
         </Link>
 
         <div className="collapse navbar-collapse">
@@ -27,7 +28,7 @@ const Header = () => {
         </div>
 
         <Link href="/create"
-           className="btn btn-primary" >Create
+           className={styles.createBtn}>Create
         </Link>
       </div>
       
