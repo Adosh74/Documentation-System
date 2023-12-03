@@ -19,7 +19,7 @@
 
 .phaseBtn{
     background-color: lightgray;
-    color: darkblue;
+    color: rgb(8, 8, 11);
     border: 1px solid darkblue;
     font-size: 0.9em;
     font-weight: 700;
@@ -32,10 +32,13 @@
 
 }
 .phaseBtn:hover {
-    background-color: rgba(175, 178, 185, 0.454);
+    background-color: rgba(89, 108, 153, 0.454);
     transform: scale(1);
      cursor: pointer;
 }
+.phaseBtn:focus {
+  background-color: #520632;
+} 
 
 .phaseBody{
     background-color: rgb(52, 58, 58);
@@ -58,6 +61,7 @@
 
 
 .container label {
+  color: #afaaaa;
   display: block;
   margin-bottom: 10px;
 font-weight: 700;
@@ -118,6 +122,14 @@ font-weight: 700;
 
 /*//////////////////////////////////////*/
 
+.error{
+			color: #D8000C;
+			background-color: #FFBABA;
+      text-align: center;
+			
+		}
+
+   
 
 
 

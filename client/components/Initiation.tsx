@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import styles from "./Styles.module.css";
-
+import ChoosePhase from "./ChoosePhase";
+import SRS from "./SRS";
+import SDD from "./SDD";
 
 interface ProjectInfo {
   title: string;
@@ -13,9 +15,16 @@ interface ProjectInfo {
   scopeStatements: string;
 }
 
-const Initiation: React.FC = () => {
+interface InitiationProps {
+  onSave: () => void;
+}
+
+const Initiation: React.FC<InitiationProps> = ({ onSave }) => {
+  const [dataSaved, setDataSaved] = useState<boolean>(false);
+
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<string>();
 
   const initialProjectInfo: ProjectInfo = {
     title: "",
@@ -41,6 +50,7 @@ const Initiation: React.FC = () => {
     setProjectInfo(initialProjectInfo);
     setSuccessMessage("");
     setErrorMessage("");
+    setSelectedDate("");
   };
   const handleSave = () => {
     if (
@@ -59,6 +69,8 @@ const Initiation: React.FC = () => {
 
     setSuccessMessage("saved successfully!");
     setErrorMessage("");
+    onSave();
+    setDataSaved(true);
   };
 
   return (
@@ -74,19 +86,23 @@ const Initiation: React.FC = () => {
               onChange={(e) => handleInputChange("title", e.target.value)}
             />
           </label>
-          <label>
+
+          <label htmlFor="datePicker">
             Project Start Date
             <input
-              type="text"
-              value={projectInfo.startDate}
+              type="date"
+              id="datePicker"
+              value={selectedDate}
               onChange={(e) => handleInputChange("startDate", e.target.value)}
             />
           </label>
+
           <label>
             Project Finish Date
             <input
-              type="text"
-              value={projectInfo.finishDate}
+              type="date"
+              id="datePicker"
+              value={selectedDate}
               onChange={(e) => handleInputChange("finishDate", e.target.value)}
             />
           </label>

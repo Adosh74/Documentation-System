@@ -1,9 +1,9 @@
 // components/ItemList.js
-import React, { useState } from 'react';
-import styles from "./Styles.module.css"
+import React, { useState } from "react";
+import styles from "./Styles.module.css";
 
 interface ItemListProps {
-  items: string[]; 
+  items: string[];
   onSelect: (selectedItem: string) => void;
 }
 
@@ -19,8 +19,10 @@ const ItemList: React.FC<ItemListProps> = ({ items, onSelect }) => {
     <ul>
       {items.map((item, index) => (
         <li key={index} onClick={() => handleItemClick(item)}>
-          
-          <div onClick={() => handleItemClick(item)} className={styles.phaseBtn}>
+          <div
+            onClick={() => handleItemClick(item)}
+            className={styles.phaseBtn}
+          >
             {item}
           </div>
         </li>
