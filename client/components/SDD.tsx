@@ -1,14 +1,21 @@
 // components/SDD.tsx
 import React, { useState } from "react";
 import styles from "./Styles.module.css";
+import SDLC from "./SDLC";
+import Link from "next/link";
 
 interface Document {
   id: number;
   file: string;
   fileName: string;
 }
+interface SRSProps {
+    onSave: (updatedInfo: Document) => void;
+    initialProjectInfoo: Document; 
+}
 
-const SDD: React.FC = () => {
+const SDD: React.FC<SRSProps> = ({onSave}) => {
+  const [dataSaved, setDataSaved] = useState<boolean>(false);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [newDocumentId, setNewDocumentId] = useState<number>(1);
   const [successMessage, setSuccessMessage] = useState<string>("");
@@ -56,11 +63,14 @@ const SDD: React.FC = () => {
       );
       return;
     }
-
+    <>
+    <SDLC InitiationProjectInfo={undefined} SRSProjectInfo={undefined} SDDProjectInfo={documents}/>
+    </>
     console.log("Saved SDD Information:", documents);
-
+onSave(documents[0]);
     // Show success message
     setSuccessMessage("SDD information saved successfully!");
+    setDataSaved(true);
     // Clear error message
     setErrorMessage("");
   };
@@ -135,6 +145,8 @@ const SDD: React.FC = () => {
               <button onClick={handleSave}>Save</button>
               <button onClick={handleReset}>Reset</button>
             </div>
+            {dataSaved&&<Link href="/sdlc" ><button style={{ color: "red",backgroundColor:"yellow" }}>view Phase</button></Link>}
+
           </div>
         </div>
       </div>

@@ -6,6 +6,28 @@ import Initiation from "./Initiation";
 import SRS from "./SRS";
 import SDD from "./SDD";
 
+const initialProjectInfo = {
+    title: "",
+    startDate: "",
+    finishDate: "",
+    objectives: "",
+    projectManager: "",
+    budget: "",
+    scopeStatements: "",
+  };
+  const SRSProjectInfo= {
+    introduction: "",
+    purposeOfSoftwareBeingDeveloped: "",
+    intendedAudience: "",
+    overallDescriptionOfTheSoftware: "",
+    systemFeaturesAndRequirements: "",
+    browserImage:"",
+  };
+const SDDProjectInfo={
+id: 0,
+  file: "",
+  fileName: "",
+}
 const ChoosePhase: React.FC = () => {
   const [componentInitiationDataSaved, setcomponentInitiationDataSaved] =
     useState<boolean>(false);
@@ -60,12 +82,12 @@ const ChoosePhase: React.FC = () => {
       </header>
       <div>
         {selectedItem === "Initiation Phase" && (
-          <Initiation onSave={handleSaveComponentInitiation} />
+          <Initiation onSave={handleSaveComponentInitiation} initialProjectInfoo={initialProjectInfo} />
         )}
         {selectedItem === "Requirements Phase (SRS)" && (
           <div>
             {componentInitiationDataSaved ? (
-              <SRS />
+              <SRS onSave={handleSaveComponentInitiation} initialProjectInfoo={SRSProjectInfo}/>
             ) : (
               <p className={styles.error}>
                 Please fill out the Initiation phase content first
@@ -76,7 +98,7 @@ const ChoosePhase: React.FC = () => {
         {selectedItem === "Design Phase (SDD)" && (
           <div>
             {componentInitiationDataSaved ? (
-              <SDD />
+              <SDD onSave={handleSaveComponentInitiation} initialProjectInfoo={SDDProjectInfo}  />
             ) : (
               <p className={styles.error}>
                 Please fill out the Initiation phase content first

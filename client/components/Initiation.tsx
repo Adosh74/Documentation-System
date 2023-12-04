@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import styles from "./Styles.module.css";
-import ChoosePhase from "./ChoosePhase";
-import SRS from "./SRS";
-import SDD from "./SDD";
+import SDLC from "./SDLC";
+import Sdlc from "@/app/sdlc/page";
+import Link from "next/link";
 
 interface ProjectInfo {
   title: string;
@@ -16,10 +16,11 @@ interface ProjectInfo {
 }
 
 interface InitiationProps {
-  onSave: () => void;
+   onSave: (updatedInfo: ProjectInfo) => void;
+    initialProjectInfoo: ProjectInfo; 
 }
 
-const Initiation: React.FC<InitiationProps> = ({ onSave }) => {
+const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) => {
   const [dataSaved, setDataSaved] = useState<boolean>(false);
 
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -66,14 +67,17 @@ const Initiation: React.FC<InitiationProps> = ({ onSave }) => {
       return;
     }
     console.log("Project information saved:", projectInfo);
-
+    <>
+    <SDLC InitiationProjectInfo={projectInfo} SRSProjectInfo={undefined} SDDProjectInfo={undefined}/>
+    </>
     setSuccessMessage("saved successfully!");
     setErrorMessage("");
-    onSave();
+    onSave(projectInfo);
     setDataSaved(true);
   };
 
   return (
+    <div>
     <div className={styles.phaseBody}>
       <div className="p-5 text-center bg-image">
         <div className={styles.container}>
@@ -148,9 +152,13 @@ const Initiation: React.FC<InitiationProps> = ({ onSave }) => {
             <button onClick={handleSave}>Save</button>
             <button onClick={handleReset}>Reset</button>
           </div>
+            {dataSaved&&<Link href="/sdlc" ><button style={{ color: "red",backgroundColor:"yellow" }}>view Phase</button></Link>}
         </div>
       </div>
     </div>
+
+    </div>
+
   );
 };
 

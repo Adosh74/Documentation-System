@@ -1,17 +1,21 @@
-import Header from "@/components/Header";
-import Link from "next/link";
-import InitiationPhase from "@/components/Initiation";
-export const metadata ={title:"SDLC"}
-import { useRouter } from 'next/router';
 
- const sdlc:React.FC = ()=> {
+import Header from "@/components/Header";
+import ViewPhases from "@/components/ViewPhases";
+import SDLC from "@/components/SDLC";
+
+interface Info{
+  ProjectInfo:{};
+}
+
+ const Sdlc:React.FC<Info> = ({ProjectInfo})=> {
+ 
   return (
     <>
       <Header/>
-      
-    </>
+      <ViewPhases ProjectInfo={{ProjectInfo}}/>
+         </>
   );
 }
 
-export default sdlc;
+export default Sdlc;
 

@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import styles from "./Styles.module.css";
+import SDLC from "./SDLC";
+import Link from "next/link";
 
 interface ProjectInfo {
   introduction: string;
@@ -8,10 +10,18 @@ interface ProjectInfo {
   intendedAudience: string;
   overallDescriptionOfTheSoftware: string;
   systemFeaturesAndRequirements: string;
+  browserImage:string;
 }
 
+interface SRSProps {
+   onSave: (updatedInfo: ProjectInfo) => void;
+    initialProjectInfoo: ProjectInfo; 
+}
 
-const SRS: React.FC = () => {
+const SRS: React.FC <SRSProps>= ({onSave ,initialProjectInfoo}) => {
+  const [dataSaved, setDataSaved] = useState<boolean>(false);
+  const [browserImage, setBrowserImage] = useState<string>("");
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -22,9 +32,8 @@ const SRS: React.FC = () => {
       };
       reader.readAsDataURL(file);
     }
+    
   };
-
-  const [browserImage, setBrowserImage] = useState<string>("");
 
   const initialProjectInfo: ProjectInfo = {
     introduction: "",
@@ -32,6 +41,7 @@ const SRS: React.FC = () => {
     intendedAudience: "",
     overallDescriptionOfTheSoftware: "",
     systemFeaturesAndRequirements: "",
+    browserImage:""
   };
 
   const [projectInfo, setProjectInfo] =
@@ -59,12 +69,13 @@ const SRS: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
   const handleSave = () => {
+  projectInfo.browserImage=browserImage;
     setProjectInfo((prevProjectInfo) => ({
       ...prevProjectInfo,
       browserImage,
     }));
     if (
-      !browserImage ||
+      !projectInfo.browserImage ||
       !projectInfo.introduction ||
       !projectInfo.purposeOfSoftwareBeingDeveloped ||
       !projectInfo.intendedAudience ||
@@ -74,10 +85,15 @@ const SRS: React.FC = () => {
       setErrorMessage("Please complete all required fields.");
       return;
     }
+    <>
+    <SDLC InitiationProjectInfo={undefined} SRSProjectInfo={projectInfo} SDDProjectInfo={undefined}/>
+    </>
     console.log("Project information saved:", projectInfo);
-
+    onSave(projectInfo);
     setSuccessMessage("saved successfully!");
     setErrorMessage("");
+    setDataSaved(true);
+
   };
 
   return (
@@ -173,6 +189,7 @@ const SRS: React.FC = () => {
               <button onClick={handleSave}>Save</button>
               <button onClick={handleReset}>Reset</button>
             </div>
+            {dataSaved&&<Link href="/sdlc" ><button style={{ color: "red",backgroundColor:"yellow" }}>view Phase</button></Link>}
           </div>
         </div>
       </div>

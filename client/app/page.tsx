@@ -6,6 +6,7 @@ import styles from './page.module.css';
 
 
 function Home() {
+	console.log("rrrrrrrrrrrrrrrrr")
 	return (
 		<main>
 			<Header />
