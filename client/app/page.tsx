@@ -3,14 +3,16 @@ import { AppProps } from 'next/app';
 import { Component } from "react";
 import Header from '@/components/Header';
 import styles from './page.module.css';
+import SDLC from '@/components/SDLC';
 
 
 function Home() {
-	console.log("rrrrrrrrrrrrrrrrr")
 	return (
 		<main>
 			<Header />
-			<div className={styles.home}></div>
+			<div className={styles.home}>
+
+			</div>
 		</main>
 	);
 }

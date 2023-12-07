@@ -8,13 +8,37 @@ import SRS from "./SRS";
 import SDD from "./SDD";
 import ViewSDD from "./ViewSDD";
 
+interface initiation {
+  title: string;
+  startDate: string;
+  finishDate: string;
+  objectives: string;
+  projectManager: string;
+  budget: string;
+  scopeStatements: string;
+}
+interface srs {
+  introduction: string;
+  purposeOfSoftwareBeingDeveloped: string;
+  intendedAudience: string;
+  overallDescriptionOfTheSoftware: string;
+  systemFeaturesAndRequirements: string;
+  browserImage:string;
+}
+
+interface sdd {
+  id: number;
+  file: string;
+  fileName: string;
+}
 
 interface Info{
-  InitiationProjectInfo:any;
-  SRSProjectInfo:any;
-  SDDProjectInfo:any;
-
+  InitiationProjectInfo:initiation|undefined;
+  SRSProjectInfo:srs|undefined;
+  SDDProjectInfo: sdd[]|undefined;
 }
+
+
 
  const SDLC:React.FC<Info> = ({InitiationProjectInfo ,SRSProjectInfo,SDDProjectInfo})=> {
 

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Styles.module.css";
 import SDLC from "./SDLC";
 import Link from "next/link";
@@ -15,8 +15,24 @@ interface ProjectInfo {
 
 interface SRSProps {
    onSave: (updatedInfo: ProjectInfo) => void;
-    initialProjectInfoo: ProjectInfo; 
+    initialProjectInfoo: ProjectInfo |undefined; 
 }
+const initialInfo = {
+    title: "",
+    startDate: "",
+    finishDate: "",
+    objectives: "",
+    projectManager: "",
+    budget: "",
+    scopeStatements: "",
+  };
+     const sdd ={
+    id: 0,
+  file: "",
+  fileName: ""
+  };
+  const sddInfo =[sdd];
+  
 
 const SRS: React.FC <SRSProps>= ({onSave ,initialProjectInfoo}) => {
   const [dataSaved, setDataSaved] = useState<boolean>(false);
@@ -35,7 +51,7 @@ const SRS: React.FC <SRSProps>= ({onSave ,initialProjectInfoo}) => {
     
   };
 
-  const initialProjectInfo: ProjectInfo = {
+  const initialProjectInfo: ProjectInfo = initialProjectInfoo || {
     introduction: "",
     purposeOfSoftwareBeingDeveloped: "",
     intendedAudience: "",
@@ -46,6 +62,13 @@ const SRS: React.FC <SRSProps>= ({onSave ,initialProjectInfoo}) => {
 
   const [projectInfo, setProjectInfo] =
     useState<ProjectInfo>(initialProjectInfo);
+
+         useEffect(() => {
+    if (initialProjectInfoo) {
+      setProjectInfo(initialProjectInfoo);
+      setBrowserImage(initialProjectInfoo.browserImage);
+    }
+  }, [initialProjectInfoo]);
 
   const handleInputChange = (key: keyof ProjectInfo, value: string) => {
     setProjectInfo((prevInfo) => ({
@@ -85,9 +108,7 @@ const SRS: React.FC <SRSProps>= ({onSave ,initialProjectInfoo}) => {
       setErrorMessage("Please complete all required fields.");
       return;
     }
-    <>
-    <SDLC InitiationProjectInfo={undefined} SRSProjectInfo={projectInfo} SDDProjectInfo={undefined}/>
-    </>
+    
     console.log("Project information saved:", projectInfo);
     onSave(projectInfo);
     setSuccessMessage("saved successfully!");

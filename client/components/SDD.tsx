@@ -1,8 +1,10 @@
 // components/SDD.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Styles.module.css";
 import SDLC from "./SDLC";
 import Link from "next/link";
+import AllFiles from "./AllFiles"; 
+
 
 interface Document {
   id: number;
@@ -10,16 +12,25 @@ interface Document {
   fileName: string;
 }
 interface SRSProps {
-    onSave: (updatedInfo: Document) => void;
-    initialProjectInfoo: Document; 
+    onSave: (updatedInfo: Document[]) => void;
+     initialProjectInfoo?: Document[] | undefined;
 }
 
-const SDD: React.FC<SRSProps> = ({onSave}) => {
+const SDD: React.FC<SRSProps> = ({onSave,initialProjectInfoo}) => {
   const [dataSaved, setDataSaved] = useState<boolean>(false);
-  const [documents, setDocuments] = useState<Document[]>([]);
-  const [newDocumentId, setNewDocumentId] = useState<number>(1);
+   const [documents, setDocuments] = useState<Document[]>(Array.isArray(initialProjectInfoo) ? initialProjectInfoo : []);
+  const [newDocumentId, setNewDocumentId] = useState<number>( 1);
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  
+ useEffect(() => {
+    // Initialize state with initialProjectInfoo when provided
+    if (Array.isArray(initialProjectInfoo)) {
+      setDocuments(initialProjectInfoo);
+      setNewDocumentId(initialProjectInfoo.length + 1);
+    }
+  }, [initialProjectInfoo]);
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -63,11 +74,8 @@ const SDD: React.FC<SRSProps> = ({onSave}) => {
       );
       return;
     }
-    <>
-    <SDLC InitiationProjectInfo={undefined} SRSProjectInfo={undefined} SDDProjectInfo={documents}/>
-    </>
     console.log("Saved SDD Information:", documents);
-onSave(documents[0]);
+onSave(documents);
     // Show success message
     setSuccessMessage("SDD information saved successfully!");
     setDataSaved(true);
@@ -91,10 +99,10 @@ onSave(documents[0]);
         <div className="p-5 text-center bg-image">
           <div className={styles.container}>
             <h2>System Design Document (SDD)</h2>
-            <p className={styles.prag}>
+            <h5 className={styles.prag}>
               Insert documents as Images <br />
               [UML Diagrams - Database Design - User Interface Design]
-            </p>
+            </h5>
             {documents.map((doc) => (
               <div key={doc.id}>
                 <label htmlFor={`fileNameInput-${doc.id}`}>File Name</label>
@@ -145,7 +153,15 @@ onSave(documents[0]);
               <button onClick={handleSave}>Save</button>
               <button onClick={handleReset}>Reset</button>
             </div>
-            {dataSaved&&<Link href="/sdlc" ><button style={{ color: "red",backgroundColor:"yellow" }}>view Phase</button></Link>}
+            {dataSaved && (
+        <>
+          <Link href="/files">
+            <button style={{ color: "red", backgroundColor: "yellow" }}>
+              View Phase
+            </button>
+          </Link>
+        </>
+      )}
 
           </div>
         </div>

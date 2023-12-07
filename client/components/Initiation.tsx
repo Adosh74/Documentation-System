@@ -1,8 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Styles.module.css";
 import SDLC from "./SDLC";
-import Sdlc from "@/app/sdlc/page";
 import Link from "next/link";
 
 interface ProjectInfo {
@@ -17,8 +16,26 @@ interface ProjectInfo {
 
 interface InitiationProps {
    onSave: (updatedInfo: ProjectInfo) => void;
-    initialProjectInfoo: ProjectInfo; 
+    initialProjectInfoo: ProjectInfo| undefined; 
 }
+ const srsInfo = {
+    introduction: "",
+    purposeOfSoftwareBeingDeveloped: "",
+    intendedAudience: "",
+    overallDescriptionOfTheSoftware: "",
+    systemFeaturesAndRequirements: "",
+    browserImage:""
+  };
+
+   const sdd ={
+    id: 0,
+  file: "",
+  fileName: ""
+  };
+  const sddInfo =[sdd];
+
+  
+     
 
 const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) => {
   const [dataSaved, setDataSaved] = useState<boolean>(false);
@@ -27,7 +44,7 @@ const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) =
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<string>();
 
-  const initialProjectInfo: ProjectInfo = {
+    const initialProjectInfo: ProjectInfo = initialProjectInfoo || {
     title: "",
     startDate: "",
     finishDate: "",
@@ -40,7 +57,15 @@ const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) =
   const [projectInfo, setProjectInfo] =
     useState<ProjectInfo>(initialProjectInfo);
 
+     useEffect(() => {
+    // Update state when initialProjectInfoo changes (if it's provided)
+    if (initialProjectInfoo) {
+      setProjectInfo(initialProjectInfoo);
+    }
+  }, [initialProjectInfoo]);
+
   const handleInputChange = (key: keyof ProjectInfo, value: string) => {
+    
     setProjectInfo((prevInfo) => ({
       ...prevInfo,
       [key]: value,
@@ -67,9 +92,7 @@ const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) =
       return;
     }
     console.log("Project information saved:", projectInfo);
-    <>
-    <SDLC InitiationProjectInfo={projectInfo} SRSProjectInfo={undefined} SDDProjectInfo={undefined}/>
-    </>
+    
     setSuccessMessage("saved successfully!");
     setErrorMessage("");
     onSave(projectInfo);
@@ -91,7 +114,7 @@ const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) =
             />
           </label>
 
-          <label htmlFor="datePicker">
+          <label htmlFor="startDatePicker">
             Project Start Date
             <input
               type="date"
@@ -101,7 +124,7 @@ const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) =
             />
           </label>
 
-          <label>
+          <label htmlFor="finishDatePicker">
             Project Finish Date
             <input
               type="date"
@@ -154,6 +177,7 @@ const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) =
           </div>
             {dataSaved&&<Link href="/sdlc" ><button style={{ color: "red",backgroundColor:"yellow" }}>view Phase</button></Link>}
         </div>
+
       </div>
     </div>
 

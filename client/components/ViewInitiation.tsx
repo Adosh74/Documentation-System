@@ -22,7 +22,9 @@ const ViewInitiation: React.FC<ViewInitiationProps> = ({
 }) => {
   return (
     <div>
+      <div style={{backgroundColor:"ButtonHighlight",paddingLeft:"29em"}}>
       <h2>Initiation Phase</h2>
+    </div>
       <h5>Title: </h5><p>{projectInfo.title}</p>
       <h5>Start Date: </h5><p>{projectInfo.startDate}</p>
       <h5>Finish Date: </h5><p>{projectInfo.finishDate}</p>
@@ -33,7 +35,7 @@ const ViewInitiation: React.FC<ViewInitiationProps> = ({
        <br/>
         <div style={{textAlign:"center"}}>
           <button onClick={onEdit}>Edit</button>
-          <button onClick={onDelete}>Delete</button>
+          <button style={{backgroundColor:"red"}}  onClick={onDelete}>Delete</button>
         </div>
     </div>
   );

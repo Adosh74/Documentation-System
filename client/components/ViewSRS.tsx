@@ -35,7 +35,9 @@ const SRS: React.FC<ViewSRSProps> = ({
 
   return (
     <div>
+      <div style={{backgroundColor:"ButtonHighlight",paddingLeft:"29em"}}>
       <h2>SRS Phase</h2>
+    </div>
       <h5>Introduction: </h5><p>{projectInfo.introduction}</p>
       <h5>Purpose Of Software Being Developed: </h5><p>{projectInfo.purposeOfSoftwareBeingDeveloped}</p>
       <h5>Intended Audience: </h5><p>{projectInfo.intendedAudience}</p>
@@ -55,7 +57,7 @@ const SRS: React.FC<ViewSRSProps> = ({
       
       <div style={{textAlign:"center"}}>
       <button onClick={onEdit}>Edit</button>
-      <button onClick={onDelete}>Delete</button>
+      <button  style={{backgroundColor:"red"}} onClick={onDelete}>Delete</button>
       </div>
     </div>
   );

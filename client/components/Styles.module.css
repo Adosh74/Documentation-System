@@ -137,11 +137,12 @@ font-weight: 700;
   border: 4px solid #ccc;
   border-radius:50px;
   margin: 30px;
-  max-width: 900px;
+  max-width: 1500px;
 }
 
  .view h2 {
   color: #333;
+  font-weight: 900;
 }
 
 .view p {
@@ -151,7 +152,7 @@ font-weight: 700;
 
 .view button {
   margin-top: 10px;
-  margin-left: 20px;
+  margin-left: 60px;
   padding: 8px 16px;
   background-color: #4caf50;
   color: #fff;
