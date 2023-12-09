@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import Link from 'next/link';
 import styles from "./Styles.module.css"
 
@@ -21,7 +20,7 @@ const Header = () => {
             </li>
             <li className="nav-item">
               <Link href="/files"
-                 className="nav-link">All Filles
+                 className="nav-link">Files
               </Link>
             </li>
           </ul>

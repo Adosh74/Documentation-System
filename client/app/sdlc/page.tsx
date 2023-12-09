@@ -29,18 +29,33 @@ interface sdd {
   fileName: string;
 }
 
-interface Info{
-  InitiationProjectInfo:initiation|undefined;
-  SRSProjectInfo:srs|undefined;
-  SDDProjectInfo: sdd[]|undefined;
-}
+//        Example Data
 
+const  InitiationProjectInfo: initiation = {
+    title: "Initial Title",
+    startDate: "12/03/2023",
+    finishDate: "12/20/2023",
+    objectives: "Initial Objectives",
+    projectManager: "Initial Project Manager",
+    budget: "Initial Budget",
+    scopeStatements: "Initial Scope Statements",
+  };
+const SRSProjectInfo: srs = {
+    introduction: "Hello",
+    purposeOfSoftwareBeingDeveloped: "purposeOfSoftwareBeingDeveloped",
+    intendedAudience: "intendedAudience",
+    overallDescriptionOfTheSoftware: "overallDescriptionOfTheSoftware",
+    systemFeaturesAndRequirements: "systemFeaturesAndRequirements",
+    browserImage:"../icon.png"
+  };
+const SDDProjectInfo : sdd[] =[{id:1,file:"../icon.png",fileName:"Database Design"},
+ {id:2,file:"../icon.png",fileName:"UML Diagrams"}];
 
- const Sdlc:React.FC<Info> = ({  InitiationProjectInfo,SRSProjectInfo,SDDProjectInfo})=> {
-  const [projectInfo1, setProjectInfo1] = useState<any>({InitiationProjectInfo});
-  const [projectInfo2, setProjectInfo2] = useState<any>({SRSProjectInfo});
-  const [projectInfo3, setProjectInfo3] = useState<any>({SDDProjectInfo});
- 
+ const Sdlc:React.FC = ()=> {
+  const [projectInfo1, setProjectInfo1] = useState<any>(InitiationProjectInfo);
+  const [projectInfo2, setProjectInfo2] = useState<any>(SRSProjectInfo);
+  const [projectInfo3, setProjectInfo3] = useState<any>(SDDProjectInfo);
+  
   return (
        <div className={styles.body}>
       <Header/>

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import styles from "./Styles.module.css";
 import ItemList from "./ItemList";
 import Initiation from "./Initiation";
@@ -23,11 +22,14 @@ const initialProjectInfo = {
     systemFeaturesAndRequirements: "",
     browserImage:"",
   };
-const SDDProjectInfo={
-id: 0,
-  file: "",
-  fileName: "",
+  interface sdd {
+  id: number;
+  file: string;
+  fileName: string;
 }
+
+const SDDProjectInfo:sdd[]=[];
+
 const ChoosePhase: React.FC = () => {
   const [componentInitiationDataSaved, setcomponentInitiationDataSaved] =
     useState<boolean>(false);

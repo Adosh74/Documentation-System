@@ -1,9 +1,6 @@
-// components/SDD.tsx
 import React, { useEffect, useState } from "react";
 import styles from "./Styles.module.css";
-import SDLC from "./SDLC";
 import Link from "next/link";
-import AllFiles from "./AllFiles"; 
 
 
 interface Document {
@@ -25,7 +22,6 @@ const SDD: React.FC<SRSProps> = ({onSave,initialProjectInfoo}) => {
 
   
  useEffect(() => {
-    // Initialize state with initialProjectInfoo when provided
     if (Array.isArray(initialProjectInfoo)) {
       setDocuments(initialProjectInfoo);
       setNewDocumentId(initialProjectInfoo.length + 1);
@@ -67,7 +63,6 @@ const SDD: React.FC<SRSProps> = ({onSave,initialProjectInfoo}) => {
       return;
     }
 
-    // Validate that all documents have a file and fileName
     if (documents.some((doc) => !doc.file || !doc.fileName)) {
       setErrorMessage(
         "Please provide both file and fileName for all documents."
@@ -76,19 +71,15 @@ const SDD: React.FC<SRSProps> = ({onSave,initialProjectInfoo}) => {
     }
     console.log("Saved SDD Information:", documents);
 onSave(documents);
-    // Show success message
     setSuccessMessage("SDD information saved successfully!");
     setDataSaved(true);
-    // Clear error message
     setErrorMessage("");
   };
 
   const handleReset = () => {
-    // Reset the SDD information to its initial state
-    setDocuments([]);
+    setDocuments(Array.isArray(initialProjectInfoo) ? initialProjectInfoo : []);
     setNewDocumentId(1);
 
-    // Clear success and error messages on reset
     setSuccessMessage("");
     setErrorMessage("");
   };
@@ -155,7 +146,7 @@ onSave(documents);
             </div>
             {dataSaved && (
         <>
-          <Link href="/files">
+          <Link href="/sdlc">
             <button style={{ color: "red", backgroundColor: "yellow" }}>
               View Phase
             </button>

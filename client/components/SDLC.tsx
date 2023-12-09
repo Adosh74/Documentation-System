@@ -33,32 +33,35 @@ interface sdd {
 }
 
 interface Info{
-  InitiationProjectInfo:initiation|undefined;
-  SRSProjectInfo:srs|undefined;
-  SDDProjectInfo: sdd[]|undefined;
+  InitiationProjectInfo:initiation;
+  SRSProjectInfo:srs;
+  SDDProjectInfo: sdd[];
 }
 
 
 
  const SDLC:React.FC<Info> = ({InitiationProjectInfo ,SRSProjectInfo,SDDProjectInfo})=> {
 
-  const [projectInfo1, setProjectInfo1] = useState<any>({InitiationProjectInfo});
-  const [projectInfo2, setProjectInfo2] = useState<any>({SRSProjectInfo});
-  const [projectInfo3, setProjectInfo3] = useState<any>({SDDProjectInfo});
+  const [projectInfo1, setProjectInfo1] = useState<any>(InitiationProjectInfo);
+  const [projectInfo2, setProjectInfo2] = useState<any>(SRSProjectInfo);
+  const [projectInfo3, setProjectInfo3] = useState<any>(SDDProjectInfo);
 
   const [isEditing1, setIsEditing1] = useState<boolean>(false);
   const [isEditing2, setIsEditing2] = useState<boolean>(false);
   const [isEditing3, setIsEditing3] = useState<boolean>(false);
 
+
+
   const handleSave1 = (updatedInfo: any) => {
     setProjectInfo1(updatedInfo);
     setIsEditing1(false);
+
   };
   const handleEdit1 = () => {
     setIsEditing1(true);
   };
   const handleDelete1 = () => {
-    setProjectInfo1(null);
+    setProjectInfo1(null);    
   };
 
 const handleSave2 = (updatedInfo: any) => {
@@ -111,7 +114,7 @@ const handleSave2 = (updatedInfo: any) => {
         )
       )}
     </div>
-     <div >
+     <div style={{marginBottom:"0em"}}>
       {isEditing3 ? (
         <SDD onSave={handleSave3} initialProjectInfoo={projectInfo3} />
       ) : (

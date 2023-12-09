@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./Styles.module.css";
 
 interface Document {
   id: number;
@@ -6,25 +7,46 @@ interface Document {
   fileName: string;
 }
 
+
 interface AllFilesProps {
   files: Document[];
+  useCase:string;
 }
 
-const AllFiles: React.FC<AllFilesProps> = ({ files }) => {
+const AllFiles: React.FC<AllFilesProps> = ({ files ,useCase}) => {
+
+ 
   return (
-    <div>
-      <h2>All Files</h2>
-      {files.map((file) => (
-        <div key={file.id}>
-          <p>File Name: {file.fileName}</p>
-          <p>File Content:</p>
+    <div style={{backgroundColor:"white",border: "4px solid #ddd",borderRadius: "10px"}}>
+      <h1  style={{color:"white",backgroundColor:"#3c3b3b",borderRadius: "10px"}} >All Files</h1>
+      {useCase ?(
+        <div  style={{border: "4px solid #ddd", borderRadius: "10px"}}>
+          <h5>File Name </h5><p style={{color:"GrayText"}}>UseCase</p>
+          <h5>File Content</h5>
+          <img
+            src={useCase}
+            alt={`Preview for UseCase`}
+            className={styles.images}
+          />
+        </div>
+      ):(
+        <></>
+      )}
+      
+      <div>
+        {files.map((file) => (
+        <div key={file.id} style={{border: "4px solid #ddd", borderRadius: "10px"}}>
+          <h5>File Name </h5><p style={{color:"GrayText"}}>{file.fileName}</p>
+          <h5>File Content</h5>
           <img
             src={file.file}
             alt={`Preview for ${file.fileName}`}
-            style={{ maxWidth: "100%" }}
+            className={styles.images}
           />
         </div>
       ))}
+      </div>
+        
     </div>
   );
 };

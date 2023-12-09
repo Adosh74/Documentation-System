@@ -28,9 +28,9 @@ interface sdd {
 }
 
 interface Info{
-  InitiationProjectInfo:initiation|undefined;
-  SRSProjectInfo:srs|undefined;
-  SDDProjectInfo: sdd[]|undefined;
+  InitiationProjectInfo:initiation;
+  SRSProjectInfo:srs;
+  SDDProjectInfo: sdd[];
 }
 
 
@@ -38,7 +38,7 @@ interface Info{
   
   return (
     <>
-      <SDLC InitiationProjectInfo={undefined} SRSProjectInfo={undefined} SDDProjectInfo={undefined}/>
+      <SDLC InitiationProjectInfo={InitiationProjectInfo} SRSProjectInfo={SRSProjectInfo} SDDProjectInfo={SDDProjectInfo}/>
     </>
   );
 }

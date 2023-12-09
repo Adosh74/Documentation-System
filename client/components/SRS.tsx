@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "./Styles.module.css";
-import SDLC from "./SDLC";
 import Link from "next/link";
 
 interface ProjectInfo {
@@ -15,23 +14,8 @@ interface ProjectInfo {
 
 interface SRSProps {
    onSave: (updatedInfo: ProjectInfo) => void;
-    initialProjectInfoo: ProjectInfo |undefined; 
+    initialProjectInfoo: ProjectInfo ; 
 }
-const initialInfo = {
-    title: "",
-    startDate: "",
-    finishDate: "",
-    objectives: "",
-    projectManager: "",
-    budget: "",
-    scopeStatements: "",
-  };
-     const sdd ={
-    id: 0,
-  file: "",
-  fileName: ""
-  };
-  const sddInfo =[sdd];
   
 
 const SRS: React.FC <SRSProps>= ({onSave ,initialProjectInfoo}) => {
@@ -41,7 +25,6 @@ const SRS: React.FC <SRSProps>= ({onSave ,initialProjectInfoo}) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Read the selected file and set it to the state
       const reader = new FileReader();
       reader.onloadend = () => {
         setBrowserImage(reader.result as string);
@@ -79,13 +62,11 @@ const SRS: React.FC <SRSProps>= ({onSave ,initialProjectInfoo}) => {
 
   const handleReset = () => {
     setProjectInfo(initialProjectInfo);
-    // Reset the SRS information to its initial state
     setProjectInfo((prevProjectInfo) => ({
       ...prevProjectInfo,
       browserImage: "",
-      // Reset other SRS information in projectInfo as needed
     }));
-    setBrowserImage("");
+    setBrowserImage(""||initialProjectInfoo.browserImage);
     setSuccessMessage("");
     setErrorMessage("");
   };

@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "./Styles.module.css";
-import SDLC from "./SDLC";
 import Link from "next/link";
 
 interface ProjectInfo {
@@ -18,23 +17,6 @@ interface InitiationProps {
    onSave: (updatedInfo: ProjectInfo) => void;
     initialProjectInfoo: ProjectInfo| undefined; 
 }
- const srsInfo = {
-    introduction: "",
-    purposeOfSoftwareBeingDeveloped: "",
-    intendedAudience: "",
-    overallDescriptionOfTheSoftware: "",
-    systemFeaturesAndRequirements: "",
-    browserImage:""
-  };
-
-   const sdd ={
-    id: 0,
-  file: "",
-  fileName: ""
-  };
-  const sddInfo =[sdd];
-
-  
      
 
 const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) => {
@@ -58,7 +40,6 @@ const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) =
     useState<ProjectInfo>(initialProjectInfo);
 
      useEffect(() => {
-    // Update state when initialProjectInfoo changes (if it's provided)
     if (initialProjectInfoo) {
       setProjectInfo(initialProjectInfoo);
     }
