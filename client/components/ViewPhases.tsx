@@ -5,8 +5,8 @@ import { useState } from "react";
 
 interface initiation {
   title: string;
-  startDate: string;
-  finishDate: string;
+  startDate: Date;
+  finishDate: Date;
   objectives: string;
   projectManager: string;
   budget: string;

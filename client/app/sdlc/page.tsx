@@ -7,8 +7,8 @@ import { useState } from "react";
 
 interface initiation {
   title: string;
-  startDate: string;
-  finishDate: string;
+  startDate: Date;
+  finishDate: Date;
   objectives: string;
   projectManager: string;
   budget: string;
@@ -33,13 +33,23 @@ interface sdd {
 
 const  InitiationProjectInfo: initiation = {
     title: "Initial Title",
-    startDate: "12/03/2023",
-    finishDate: "12/20/2023",
+    startDate: new Date("2023-12-03"),
+    finishDate: new Date("2023-12-20"),
     objectives: "Initial Objectives",
     projectManager: "Initial Project Manager",
     budget: "Initial Budget",
     scopeStatements: "Initial Scope Statements",
   };
+  const formattedInitiationProjectInfo = {
+  ...InitiationProjectInfo,
+  startDate: InitiationProjectInfo.startDate
+  ? InitiationProjectInfo.startDate.toISOString().split("T")[0]
+  : "",
+  finishDate:  InitiationProjectInfo.finishDate
+  ? InitiationProjectInfo.finishDate.toISOString().split("T")[0]
+  : "",
+};
+
 const SRSProjectInfo: srs = {
     introduction: "Hello",
     purposeOfSoftwareBeingDeveloped: "purposeOfSoftwareBeingDeveloped",
@@ -48,11 +58,14 @@ const SRSProjectInfo: srs = {
     systemFeaturesAndRequirements: "systemFeaturesAndRequirements",
     browserImage:"../icon.png"
   };
+
 const SDDProjectInfo : sdd[] =[{id:1,file:"../icon.png",fileName:"Database Design"},
  {id:2,file:"../icon.png",fileName:"UML Diagrams"}];
-
+ 
+//* /////////////////////////////////////////////////////////////////////// */
+ 
  const Sdlc:React.FC = ()=> {
-  const [projectInfo1, setProjectInfo1] = useState<any>(InitiationProjectInfo);
+  const [projectInfo1, setProjectInfo1] = useState<any>(formattedInitiationProjectInfo );
   const [projectInfo2, setProjectInfo2] = useState<any>(SRSProjectInfo);
   const [projectInfo3, setProjectInfo3] = useState<any>(SDDProjectInfo);
   

@@ -7,8 +7,8 @@ import SDD from "./SDD";
 
 const initialProjectInfo = {
     title: "",
-    startDate: "",
-    finishDate: "",
+    startDate: null,
+    finishDate: null,
     objectives: "",
     projectManager: "",
     budget: "",

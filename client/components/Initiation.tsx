@@ -5,8 +5,8 @@ import Link from "next/link";
 
 interface ProjectInfo {
   title: string;
-  startDate: string;
-  finishDate: string;
+  startDate: Date |null;
+  finishDate: Date | null;
   objectives: string;
   projectManager: string;
   budget: string;
@@ -15,7 +15,7 @@ interface ProjectInfo {
 
 interface InitiationProps {
    onSave: (updatedInfo: ProjectInfo) => void;
-    initialProjectInfoo: ProjectInfo| undefined; 
+    initialProjectInfoo: ProjectInfo; 
 }
      
 
@@ -24,20 +24,26 @@ const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) =
 
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
-  const [selectedDate, setSelectedDate] = useState<string>();
+
+ 
+
 
     const initialProjectInfo: ProjectInfo = initialProjectInfoo || {
     title: "",
-    startDate: "",
-    finishDate: "",
+    startDate: null,
+    finishDate: null,
     objectives: "",
     projectManager: "",
     budget: "",
     scopeStatements: "",
   };
+  
+   
 
   const [projectInfo, setProjectInfo] =
     useState<ProjectInfo>(initialProjectInfo);
+
+
 
      useEffect(() => {
     if (initialProjectInfoo) {
@@ -45,19 +51,57 @@ const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) =
     }
   }, [initialProjectInfoo]);
 
-  const handleInputChange = (key: keyof ProjectInfo, value: string) => {
-    
+
+const [startDate, setStartDate] = useState<Date | null>(
+  projectInfo.startDate ? new Date(projectInfo.startDate) : null
+);
+
+const [finishDate, setFinishDate] = useState<Date | null>(
+  projectInfo.finishDate ? new Date(projectInfo.finishDate) : null
+);
+
+const [startDateString, setStartDateString] = useState<string>(
+  startDate ? startDate.toISOString().split("T")[0] : ""
+);
+
+const [finishDateString, setFinishDateString] = useState<string>(
+  finishDate ? finishDate.toISOString().split("T")[0] : ""
+);
+
+const handleInputChange = (key: keyof ProjectInfo, value: string) => {
+  if (key === "startDate" || key === "finishDate") {
+    const dateValue = value ? new Date(value) : null;
+
+    if (key === "startDate") {
+      setStartDate(dateValue);
+      setStartDateString(value);
+    } else {
+      setFinishDate(dateValue);
+      setFinishDateString(value);
+    }
+
+  } 
     setProjectInfo((prevInfo) => ({
       ...prevInfo,
       [key]: value,
     }));
-  };
+  
+};
 
   const handleReset = () => {
     setProjectInfo(initialProjectInfo);
     setSuccessMessage("");
     setErrorMessage("");
-    setSelectedDate("");
+
+    if(initialProjectInfoo.title === ""){
+    setStartDateString("");
+    setFinishDateString("");
+  }
+  else{
+    setStartDateString(initialProjectInfoo?.startDate instanceof Date ? initialProjectInfoo.startDate.toISOString().split("T")[0] : "");
+    setFinishDateString(initialProjectInfoo?.finishDate instanceof Date ? initialProjectInfoo.finishDate.toISOString().split("T")[0] : "");
+  }
+  
   };
   const handleSave = () => {
     if (
@@ -99,8 +143,8 @@ const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) =
             Project Start Date
             <input
               type="date"
-              id="datePicker"
-              value={selectedDate}
+              id="startDatePicker"
+              value={startDateString||""}
               onChange={(e) => handleInputChange("startDate", e.target.value)}
             />
           </label>
@@ -109,8 +153,8 @@ const Initiation: React.FC<InitiationProps> = ({ onSave ,initialProjectInfoo}) =
             Project Finish Date
             <input
               type="date"
-              id="datePicker"
-              value={selectedDate}
+              id="finishDatePicker"
+              value={finishDateString||""}
               onChange={(e) => handleInputChange("finishDate", e.target.value)}
             />
           </label>
