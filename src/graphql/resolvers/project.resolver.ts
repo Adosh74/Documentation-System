@@ -33,10 +33,10 @@ export const projectResolver = {
 		async createProject(_: any, { input }: Record<string, any>) {
 			return await createProject({
 				title: input.title,
-				startIn: input.startIn,
-				endIn: input.endIn,
+				startIn: new Date(input.startIn),
+				endIn: new Date(input.endIn),
 				objectives: input.objectives,
-				budget: input.budget,
+				budget: input.budget * 1,
 				project_manager: input.project_manager,
 				scope: input.scope,
 			});
