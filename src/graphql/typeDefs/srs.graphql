@@ -1,3 +1,4 @@
+scalar Upload
 type Srs {
 	id: String!
 	intro: String!
@@ -32,7 +33,7 @@ input CreateSrsInput {
 	intended_audience: String!
 	description: String!
 	requirements: String!
-	use_case: String!
+	use_case: String
 	projectId: String
 }
 
@@ -46,7 +47,7 @@ input UpdateSrsInput {
 }
 
 type Mutation {
-	createSrs(input: CreateSrsInput!): Srs
+	createSrs(file: Upload, input: CreateSrsInput!): Srs
 	updateSrs(id: String!, input: UpdateSrsInput!): Srs
 	deleteSrs(id: String!): Srs
 }

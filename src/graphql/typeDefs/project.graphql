@@ -49,7 +49,7 @@ input ProjectUpdateInput {
 }
 
 type Mutation {
-	createProject(input: ProjectInput): Project
+	createProject(input: CreateProjectInput): Project
 	updateProject(id: String!, input: ProjectUpdateInput): Project
 	deleteProject(id: String!): Project
 }

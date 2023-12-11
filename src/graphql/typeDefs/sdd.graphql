@@ -1,6 +1,7 @@
+scalar Upload
 type Sdd {
 	id: String!
-	uml: [String]!
+	uml: [String]
 	project: Project
 	projectId: String!
 }
@@ -12,7 +13,7 @@ type Query {
 
 input SddInput {
 	id: String!
-	uml: [String]!
+	uml: [String]
 	projectId: String!
 	project: ProjectInput
 }
@@ -27,7 +28,7 @@ input UpdateSddInput {
 }
 
 type Mutation {
-	createSdd(input: CreateSddInput!): Sdd
+	createSdd(files: [Upload], input: CreateSddInput!): Sdd
 	updateSdd(id: String!, sdd: UpdateSddInput!): Sdd
 	deleteSdd(id: String!): Sdd
 }
