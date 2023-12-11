@@ -1,22 +1,21 @@
-"use client"
-import Header from "@/components/Header";
-import styles from "./page.module.css";
-import { useReducer } from 'react';
-import ChoosePhase from "@/components/ChoosePhase";
-function create() {
-    
-  return (
-    <>
-       <Header />
-       <ChoosePhase/>
+'use client';
 
-  < div >
-    <div  className={styles.section}>
-    </div>
-    </div>
-    </>
-    
-  );
+import ChoosePhase from '@/components/ChoosePhase';
+import Header from '@/components/Header';
+import { useReducer } from 'react';
+import styles from './page.module.css';
+
+function create() {
+	return (
+		<>
+			<Header />
+			<ChoosePhase />
+
+			<div>
+				<div className={styles.section}></div>
+			</div>
+		</>
+	);
 }
 
 export default create;
