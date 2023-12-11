@@ -2,6 +2,7 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import express, { Request, Response } from 'express';
+import { graphqlUploadExpress } from 'graphql-upload-ts';
 import morgan from 'morgan';
 import envConfig from './config/env.config';
 import { resolvers, typeDefs } from './graphql/index.graphql';
@@ -18,12 +19,11 @@ server
 	.then(() => {
 		// *** middleware *** //
 		// allow cross origin requests from the frontend server
-		app.use(
-			cors({
-				origin: 'http://localhost:3000',
-				credentials: true,
-			})
-		);
+		app.use(cors());
+
+		// enable file uploads in graphql
+		app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
+
 		// parse incoming requests
 		app.use(express.json({ limit: '50mb' }));
 		app.use(express.urlencoded({ extended: true }));
