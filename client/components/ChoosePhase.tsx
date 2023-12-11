@@ -30,7 +30,13 @@ interface sdd {
 
 const SDDProjectInfo: sdd[] = [];
 
-const ChoosePhase: React.FC = () => {
+interface ChoosePhase {
+	project_Id: string;
+}
+
+const ChoosePhase: React.FC<ChoosePhase> = ({ project_Id }) => {
+	const [projectId, setProjectId] = useState<string>(project_Id);
+
 	const [componentInitiationDataSaved, setcomponentInitiationDataSaved] =
 		useState<boolean>(false);
 
@@ -91,6 +97,7 @@ const ChoosePhase: React.FC = () => {
 							<SRS
 								onSave={handleSaveComponentInitiation}
 								initialProjectInfoo={SRSProjectInfo}
+								projectId={projectId}
 							/>
 						) : (
 							<p className={styles.error}>

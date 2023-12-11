@@ -5,6 +5,7 @@ import { gql, useMutation } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import SRS from './SRS';
 import styles from './Styles.module.css';
 
 // graphql client
@@ -41,12 +42,21 @@ interface ProjectInfo {
 	scopeStatements: string;
 }
 
+const SRSProjectInfo = {
+	introduction: '',
+	purposeOfSoftwareBeingDeveloped: '',
+	intendedAudience: '',
+	overallDescriptionOfTheSoftware: '',
+	systemFeaturesAndRequirements: '',
+	browserImage: '',
+};
+
 interface InitiationProps {
 	onSave: (updatedInfo: ProjectInfo) => void;
 	initialProjectInfoo: ProjectInfo;
 }
 // object pass to srs it have project id
-export let projectData = {};
+// export let projectData = {};
 
 const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) => {
 	// graph mutation
@@ -143,30 +153,34 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 			setErrorMessage('Please complete all required fields.');
 			return;
 		}
-		try {
-			const data = await createProject({
-				variables: {
-					input: {
-						title: projectInfo.title,
-						startIn: projectInfo.startDate,
-						endIn: projectInfo.finishDate,
-						objectives: projectInfo.objectives,
-						project_manager: projectInfo.projectManager,
-						budget: projectInfo.budget * 1,
-						scope: projectInfo.scopeStatements,
-					},
-				},
-			});
-			console.log(data);
-			projectData = data;
-			setSuccessMessage('saved successfully!');
-			setErrorMessage('');
-			onSave(projectInfo);
-			setDataSaved(true);
-		} catch (error) {
-			setErrorMessage('Error saving project information.');
-			console.error(error);
-		}
+		setSuccessMessage('saved successfully!');
+		setErrorMessage('');
+		onSave(projectInfo);
+		setDataSaved(true);
+		// try {
+		// 	// const data = await createProject({
+		// 	// 	variables: {
+		// 	// 		input: {
+		// 	// 			title: projectInfo.title,
+		// 	// 			startIn: projectInfo.startDate,
+		// 	// 			endIn: projectInfo.finishDate,
+		// 	// 			objectives: projectInfo.objectives,
+		// 	// 			project_manager: projectInfo.projectManager,
+		// 	// 			budget: projectInfo.budget * 1,
+		// 	// 			scope: projectInfo.scopeStatements,
+		// 	// 		},
+		// 	// 	},
+		// 	// });
+		// 	// console.log(data);
+		// 	// projectData = data;
+		// 	setSuccessMessage('saved successfully!');
+		// 	setErrorMessage('');
+		// 	onSave(projectInfo);
+		// 	setDataSaved(true);
+		// } catch (error) {
+		// 	setErrorMessage('Error saving project information.');
+		// 	console.error(error);
+		// }
 	};
 
 	return (
@@ -279,6 +293,15 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 						</div>
 					</div>
 				</div>
+				{dataSaved && (
+					<SRS
+						onSave={() => {
+							return;
+						}}
+						initialProjectInfoo={SRSProjectInfo}
+						projectId={projectInfo.budget}
+					/>
+				)}
 			</div>
 		</ApolloProvider>
 	);

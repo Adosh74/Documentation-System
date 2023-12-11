@@ -20,9 +20,10 @@ interface ProjectInfo {
 interface SRSProps {
 	onSave: (updatedInfo: ProjectInfo) => void;
 	initialProjectInfoo: ProjectInfo;
+	projectId: string;
 }
 
-const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo }) => {
+const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => {
 	const [dataSaved, setDataSaved] = useState<boolean>(false);
 	const [browserImage, setBrowserImage] = useState<string>('');
 
@@ -104,7 +105,7 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo }) => {
 			<div className={styles.phaseBody}>
 				<div className="p-5 text-center bg-image">
 					<div className={styles.container}>
-						<h2>Requirements Phase (SRS)</h2>
+						<h2>Requirements Phase (SRS) {projectId}</h2>
 						<label>
 							Introduction
 							<textarea
