@@ -1,4 +1,6 @@
+import fs from 'fs';
 import { GraphQLResolveInfo } from 'graphql';
+import path from 'path';
 import {
 	createSrs,
 	deleteSrs,
@@ -30,14 +32,22 @@ export const srsResolver = {
 	},
 	Mutation: {
 		// *** 3.resolver for the createSrs mutation *** //
-		async createSrs(_: any, { input }: Record<string, any>) {
+		async createSrs(_: any, { file, input }: Record<string, any>) {
+			const { createReadStream, filename } = await file;
+			const { ext, name } = path.parse(filename);
+
+			const stream = createReadStream();
+			const imageName = `srs-${Date.now() + Math.random() * 100}${ext}`;
+			const pathName = path.join(process.cwd(), `/public/images/${imageName}`);
+			await stream.pipe(fs.createWriteStream(pathName));
+
 			return await createSrs({
 				intro: input.intro,
 				purpose: input.purpose,
 				intended_audience: input.intended_audience,
 				description: input.description,
 				requirements: input.requirements,
-				use_case: input.use_case,
+				use_case: imageName,
 				projectId: input.projectId,
 			});
 		},
