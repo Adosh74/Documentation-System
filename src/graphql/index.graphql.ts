@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { GraphQLUpload } from 'graphql-upload-ts';
 import path from 'path';
 import { projectResolver } from './resolvers/project.resolver';
 import { sddResolver } from './resolvers/sdd.resolver';
@@ -19,6 +20,7 @@ export const typeDefs = `
 `;
 
 export const resolvers = {
+	Upload: GraphQLUpload,
 	Query: {
 		...projectResolver.Query,
 		...sddResolver.Query,
