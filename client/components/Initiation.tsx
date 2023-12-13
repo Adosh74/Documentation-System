@@ -5,6 +5,7 @@ import { gql, useMutation } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import SDD from './SDD';
 import SRS from './SRS';
 import styles from './Styles.module.css';
 
@@ -296,13 +297,22 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 					</div>
 				</div>
 				{dataSaved && projectInfo.id && (
-					<SRS
-						onSave={() => {
-							return;
-						}}
-						initialProjectInfoo={SRSProjectInfo}
-						projectId={projectInfo.id}
-					/>
+					<div>
+						<SRS
+							onSave={() => {
+								return;
+							}}
+							initialProjectInfoo={SRSProjectInfo}
+							projectId={projectInfo.id}
+						/>
+						<SDD
+							onSave={() => {
+								return;
+							}}
+							initialProjectInfoo={[]}
+							projectId={projectInfo.id}
+						/>
+					</div>
 				)}
 			</div>
 		</ApolloProvider>
