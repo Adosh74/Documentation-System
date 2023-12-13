@@ -78,6 +78,8 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 
 	const [dataSaved, setDataSaved] = useState<boolean>(false);
 	const [browserImage, setBrowserImage] = useState<string>('');
+	const [formLocked, setFormLocked] = useState(false);
+	const inputStyle = formLocked ? { backgroundColor: '#f2f2f2', color: '#999999' } : {};
 
 	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
@@ -176,6 +178,7 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 			setSuccessMessage('saved successfully!');
 			setErrorMessage('');
 			setDataSaved(true);
+			setFormLocked(true);
 		} catch (error: any) {
 			setErrorMessage(error.message);
 			console.log(error);
@@ -197,6 +200,8 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 									onChange={(e) =>
 										handleInputChange('introduction', e.target.value)
 									}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</label>
 							<label>
@@ -209,6 +214,8 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 											e.target.value
 										)
 									}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</label>
 							<label>
@@ -221,6 +228,8 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 											e.target.value
 										)
 									}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</label>
 							<label>
@@ -233,6 +242,8 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 											e.target.value
 										)
 									}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</label>
 							<label>
@@ -252,6 +263,8 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 											e.target.value
 										)
 									}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</label>
 							<div>
@@ -261,6 +274,8 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 									id="fileInput"
 									accept="image/*"
 									onChange={handleFileChange}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</div>
 							{browserImage && (
@@ -279,8 +294,20 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 								{successMessage && (
 									<p style={{ color: 'green' }}>{successMessage}</p>
 								)}
-								<button onClick={handleSave}>Save</button>
-								<button onClick={handleReset}>Reset</button>
+								<button
+									onClick={handleSave}
+									disabled={formLocked}
+									style={inputStyle}
+								>
+									Save
+								</button>
+								<button
+									onClick={handleReset}
+									disabled={formLocked}
+									style={inputStyle}
+								>
+									Reset
+								</button>
 							</div>
 							{dataSaved && (
 								<Link href="/sdlc">

@@ -68,6 +68,8 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 
 	const [errorMessage, setErrorMessage] = useState<string>('');
 	const [successMessage, setSuccessMessage] = useState<string>('');
+	const [formLocked, setFormLocked] = useState(false);
+	const inputStyle = formLocked ? { backgroundColor: '#f2f2f2', color: '#999999' } : {};
 
 	const initialProjectInfo: ProjectInfo = initialProjectInfoo || {
 		id: '',
@@ -156,10 +158,7 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 			setErrorMessage('Please complete all required fields.');
 			return;
 		}
-		// setSuccessMessage('saved successfully!');
-		// setErrorMessage('');
-		// onSave(projectInfo);
-		// setDataSaved(true);
+
 		try {
 			const data = await createProject({
 				variables: {
@@ -180,6 +179,7 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 			setErrorMessage('');
 			onSave(projectInfo);
 			setDataSaved(true);
+			setFormLocked(true);
 		} catch (error) {
 			setErrorMessage('Error saving project information.');
 			console.error(error);
@@ -201,6 +201,8 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 									onChange={(e) =>
 										handleInputChange('title', e.target.value)
 									}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</label>
 
@@ -213,6 +215,8 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 									onChange={(e) =>
 										handleInputChange('startDate', e.target.value)
 									}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</label>
 
@@ -225,6 +229,8 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 									onChange={(e) =>
 										handleInputChange('finishDate', e.target.value)
 									}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</label>
 							<label>
@@ -234,6 +240,8 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 									onChange={(e) =>
 										handleInputChange('objectives', e.target.value)
 									}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</label>
 							<label>
@@ -247,6 +255,8 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 											e.target.value
 										)
 									}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</label>
 							<label>
@@ -257,6 +267,8 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 									onChange={(e) =>
 										handleInputChange('budget', e.target.value)
 									}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</label>
 							<label>
@@ -269,6 +281,8 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 											e.target.value
 										)
 									}
+									disabled={formLocked}
+									style={inputStyle}
 								/>
 							</label>
 							<div>
@@ -278,8 +292,20 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 								{successMessage && (
 									<p style={{ color: 'green' }}>{successMessage}</p>
 								)}
-								<button onClick={handleSave}>Save</button>
-								<button onClick={handleReset}>Reset</button>
+								<button
+									onClick={handleSave}
+									disabled={formLocked}
+									style={inputStyle}
+								>
+									Save
+								</button>
+								<button
+									onClick={handleReset}
+									disabled={formLocked}
+									style={inputStyle}
+								>
+									Reset
+								</button>
 							</div>
 							{dataSaved && (
 								<Link href="/sdlc">

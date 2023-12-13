@@ -63,6 +63,8 @@ const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 	const [newDocumentId, setNewDocumentId] = useState<number>(1);
 	const [successMessage, setSuccessMessage] = useState<string>('');
 	const [errorMessage, setErrorMessage] = useState<string>('');
+	const [formLocked, setFormLocked] = useState(false);
+	const inputStyle = formLocked ? { backgroundColor: '#f2f2f2', color: '#999999' } : {};
 
 	useEffect(() => {
 		if (Array.isArray(initialProjectInfoo)) {
@@ -135,6 +137,7 @@ const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 			setSuccessMessage('SDD information saved successfully!');
 			setDataSaved(true);
 			setErrorMessage('');
+			setFormLocked(true);
 		} catch (error) {
 			console.log('Error saving SDD information:', error);
 			setErrorMessage('Error saving SDD information.');
@@ -181,6 +184,8 @@ const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 												)
 											)
 										}
+										disabled={formLocked}
+										style={inputStyle}
 									/>
 									<label htmlFor={`fileInput-${doc.id}`}>
 										Browser Image
@@ -190,6 +195,8 @@ const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 										id={`fileInput-${doc.id}`}
 										accept="*/*"
 										onChange={(e) => handleFileChange(e, doc.id)}
+										disabled={formLocked}
+										style={inputStyle}
 									/>
 									{doc.file && (
 										<div>
@@ -218,8 +225,20 @@ const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 								<p style={{ color: 'green' }}>{successMessage}</p>
 							)}
 							<div style={{ marginTop: '40px' }}>
-								<button onClick={handleSave}>Save</button>
-								<button onClick={handleReset}>Reset</button>
+								<button
+									onClick={handleSave}
+									disabled={formLocked}
+									style={inputStyle}
+								>
+									Save
+								</button>
+								<button
+									onClick={handleReset}
+									disabled={formLocked}
+									style={inputStyle}
+								>
+									Reset
+								</button>
 							</div>
 							{dataSaved && (
 								<>
