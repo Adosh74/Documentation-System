@@ -32,13 +32,7 @@ export const srsResolver = {
 	},
 	Mutation: {
 		// *** 3.resolver for the createSrs mutation *** //
-		async createSrs(_: any, args: any) {
-			console.log('args', args);
-
-			const { input, file } = args;
-
-			let imageName = 'default.png';
-			// if (file) {
+		async createSrs(_: any, { input }: Record<string, any>) {
 			// 	const { createReadStream, filename } = await file;
 			// 	const { ext, name } = path.parse(filename);
 			// 	console.log('ext', ext);
@@ -55,7 +49,7 @@ export const srsResolver = {
 				intended_audience: input.intended_audience,
 				description: input.description,
 				requirements: input.requirements,
-				use_case: imageName,
+				use_case: input.use_case,
 				projectId: input.projectId,
 			});
 		},

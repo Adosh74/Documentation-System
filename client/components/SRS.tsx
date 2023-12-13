@@ -13,6 +13,14 @@ export const client = new ApolloClient({
 	cache: new InMemoryCache(),
 });
 
+const clientUpload = new ApolloClient({
+	link: createUploadLink({
+		uri: 'http://localhost:4000/graphql',
+		headers: { 'Apollo-Require-Preflight': 'true' },
+	}),
+	cache: new InMemoryCache(),
+});
+
 // graphql mutation for srs
 const CreateSRS = gql`
 	mutation CreateSrs($file: Upload, $input: CreateSrsInput!) {
@@ -22,7 +30,16 @@ const CreateSRS = gql`
 			purpose
 			intended_audience
 			description
+			use_case
 			requirements
+		}
+	}
+`;
+
+const UploadImageTwo = gql`
+	mutation UploadFile($file: Upload!) {
+		uploadFile(file: $file) {
+			imageName
 		}
 	}
 `;
@@ -54,6 +71,7 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 	// graphql mutation
 	const [createSRS] = useMutation(CreateSRS, { client });
 	const [uploadImage] = useMutation(UploadImage, { client });
+	const [uploadFile] = useMutation(UploadImageTwo, { client: clientUpload });
 
 	// state for image upload file
 	const [fileTwo, setFileTwo] = useState<File | null>(null);
@@ -71,14 +89,13 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 			reader.readAsDataURL(file);
 			setFileTwo(file);
 			// console.log(file);
-			console.log(fileTwo);
-
-			const { data } = await uploadImage({
+			const { data } = await uploadFile({
 				variables: {
-					image: e.target.files?.[0],
+					file: e.target.files?.[0],
 				},
 			});
-			console.log(data.uploadImage.imageName);
+			setBrowserImage(data.uploadFile.imageName);
+			console.log(data.uploadFile.imageName);
 		}
 	};
 
@@ -146,6 +163,7 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 						intended_audience: projectInfo.intendedAudience,
 						description: projectInfo.overallDescriptionOfTheSoftware,
 						requirements: projectInfo.systemFeaturesAndRequirements,
+						use_case: projectInfo.browserImage,
 						projectId: projectId,
 					},
 					// file: fileTwo,

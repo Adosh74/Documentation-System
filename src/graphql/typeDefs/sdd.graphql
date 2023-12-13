@@ -28,7 +28,7 @@ input UpdateSddInput {
 }
 
 type Mutation {
-	createSdd(files: [Upload], input: CreateSddInput!): Sdd
+	createSdd(input: CreateSddInput!): Sdd
 	updateSdd(id: String!, sdd: UpdateSddInput!): Sdd
 	deleteSdd(id: String!): Sdd
 }

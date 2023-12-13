@@ -1,6 +1,43 @@
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
+import { createUploadLink } from 'apollo-upload-client';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import styles from './Styles.module.css';
+
+export const client = new ApolloClient({
+	link: createUploadLink({
+		uri: 'http://localhost:3001/graphql',
+		headers: { 'Apollo-Require-Preflight': 'true' },
+	}),
+	cache: new InMemoryCache(),
+});
+
+const clientUpload = new ApolloClient({
+	link: createUploadLink({
+		uri: 'http://localhost:4000/graphql',
+		headers: { 'Apollo-Require-Preflight': 'true' },
+	}),
+	cache: new InMemoryCache(),
+});
+
+// mutation for Sdd
+const CreateSdd = gql`
+	mutation CreateSdd($input: CreateSddInput!) {
+		createSdd(input: $input) {
+			id
+			uml
+		}
+	}
+`;
+
+const UploadImageTwo = gql`
+	mutation UploadFile($file: Upload!) {
+		uploadFile(file: $file) {
+			imageName
+		}
+	}
+`;
 
 interface Document {
 	id: number;
@@ -14,7 +51,12 @@ interface SRSProps {
 }
 
 const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => {
+	// use mutation for sdd
+	const [createSdd] = useMutation(CreateSdd, { client });
+	const [uploadFile] = useMutation(UploadImageTwo, { client: clientUpload });
+
 	const [dataSaved, setDataSaved] = useState<boolean>(false);
+	const [umls, setUmls] = useState<string[]>([]);
 	const [documents, setDocuments] = useState<Document[]>(
 		Array.isArray(initialProjectInfoo) ? initialProjectInfoo : []
 	);
@@ -29,7 +71,10 @@ const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 		}
 	}, [initialProjectInfoo]);
 
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
+	const handleFileChange = async (
+		e: React.ChangeEvent<HTMLInputElement>,
+		id: number
+	) => {
 		const file = e.target.files?.[0];
 		if (file) {
 			const reader = new FileReader();
@@ -40,6 +85,14 @@ const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 				setDocuments(updatedDocuments);
 			};
 			reader.readAsDataURL(file);
+
+			const { data } = await uploadFile({
+				variables: {
+					file: e.target.files?.[0],
+				},
+			});
+			const { imageName } = data.uploadFile;
+			setUmls([...umls, imageName]);
 		}
 	};
 
@@ -55,7 +108,7 @@ const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 		setErrorMessage('');
 	};
 
-	const handleSave = () => {
+	const handleSave = async () => {
 		if (documents.length === 0) {
 			setErrorMessage('Please add new document');
 			return;
@@ -65,11 +118,27 @@ const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 			setErrorMessage('Please provide both file and fileName for all documents.');
 			return;
 		}
-		console.log('Saved SDD Information:', documents);
-		onSave(documents);
-		setSuccessMessage('SDD information saved successfully!');
-		setDataSaved(true);
-		setErrorMessage('');
+
+		try {
+			const { data } = await createSdd({
+				variables: {
+					input: {
+						projectId,
+						uml: umls,
+					},
+				},
+			});
+			console.log('data', data);
+
+			console.log('Saved SDD Information:', documents);
+			onSave(documents);
+			setSuccessMessage('SDD information saved successfully!');
+			setDataSaved(true);
+			setErrorMessage('');
+		} catch (error) {
+			console.log('Error saving SDD information:', error);
+			setErrorMessage('Error saving SDD information.');
+		}
 	};
 
 	const handleReset = () => {
@@ -81,92 +150,96 @@ const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 	};
 
 	return (
-		<div>
-			<div className={styles.phaseBody}>
-				<div className="p-5 text-center bg-image">
-					<div className={styles.container}>
-						<h2>System Design Document (SDD) {projectId}</h2>
-						<h5 className={styles.prag}>
-							Insert documents as Images <br />
-							[UML Diagrams - Database Design - User Interface Design]
-						</h5>
-						{documents.map((doc) => (
-							<div key={doc.id}>
-								<label htmlFor={`fileNameInput-${doc.id}`}>
-									File Name
-								</label>
-								<input
-									type="text"
-									id={`fileNameInput-${doc.id}`}
-									value={doc.fileName}
-									onChange={(e) =>
-										setDocuments((prevDocuments) =>
-											prevDocuments.map((prevDoc) =>
-												prevDoc.id === doc.id
-													? {
-															...prevDoc,
-															fileName: e.target.value,
-													  }
-													: prevDoc
+		<ApolloProvider client={client}>
+			<div>
+				<div className={styles.phaseBody}>
+					<div className="p-5 text-center bg-image">
+						<div className={styles.container}>
+							<h2>System Design Document (SDD) {projectId}</h2>
+							<h5 className={styles.prag}>
+								Insert documents as Images <br />
+								[UML Diagrams - Database Design - User Interface Design]
+							</h5>
+							{documents.map((doc) => (
+								<div key={doc.id}>
+									<label htmlFor={`fileNameInput-${doc.id}`}>
+										File Name
+									</label>
+									<input
+										type="text"
+										id={`fileNameInput-${doc.id}`}
+										value={doc.fileName}
+										onChange={(e) =>
+											setDocuments((prevDocuments) =>
+												prevDocuments.map((prevDoc) =>
+													prevDoc.id === doc.id
+														? {
+																...prevDoc,
+																fileName: e.target.value,
+														  }
+														: prevDoc
+												)
 											)
-										)
-									}
-								/>
-								<label htmlFor={`fileInput-${doc.id}`}>
-									Browser Image
-								</label>
-								<input
-									type="file"
-									id={`fileInput-${doc.id}`}
-									accept="*/*"
-									onChange={(e) => handleFileChange(e, doc.id)}
-								/>
-								{doc.file && (
-									<div>
-										<p>File Preview</p>
-										<img
-											src={doc.file}
-											alt={`Preview for ${doc.fileName}`}
-											style={{ maxWidth: '100%' }}
-										/>
-									</div>
-								)}
+										}
+									/>
+									<label htmlFor={`fileInput-${doc.id}`}>
+										Browser Image
+									</label>
+									<input
+										type="file"
+										id={`fileInput-${doc.id}`}
+										accept="*/*"
+										onChange={(e) => handleFileChange(e, doc.id)}
+									/>
+									{doc.file && (
+										<div>
+											<p>File Preview</p>
+											<img
+												src={doc.file}
+												alt={`Preview for ${doc.fileName}`}
+												style={{ maxWidth: '100%' }}
+											/>
+										</div>
+									)}
+								</div>
+							))}
+
+							<a>
+								{' '}
+								<button onClick={handleAddNewDocument}>
+									Add New Document
+								</button>
+							</a>
+
+							{errorMessage && (
+								<p style={{ color: 'red' }}>{errorMessage}</p>
+							)}
+							{successMessage && (
+								<p style={{ color: 'green' }}>{successMessage}</p>
+							)}
+							<div style={{ marginTop: '40px' }}>
+								<button onClick={handleSave}>Save</button>
+								<button onClick={handleReset}>Reset</button>
 							</div>
-						))}
-
-						<a>
-							{' '}
-							<button onClick={handleAddNewDocument}>
-								Add New Document
-							</button>
-						</a>
-
-						{errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-						{successMessage && (
-							<p style={{ color: 'green' }}>{successMessage}</p>
-						)}
-						<div style={{ marginTop: '40px' }}>
-							<button onClick={handleSave}>Save</button>
-							<button onClick={handleReset}>Reset</button>
+							{dataSaved && (
+								<>
+									<Link href="/sdlc">
+										<button
+											style={{
+												color: 'red',
+												backgroundColor: 'yellow',
+											}}
+										>
+											View Phase
+										</button>
+									</Link>
+								</>
+							)}
 						</div>
-						{dataSaved && (
-							<>
-								<Link href="/sdlc">
-									<button
-										style={{
-											color: 'red',
-											backgroundColor: 'yellow',
-										}}
-									>
-										View Phase
-									</button>
-								</Link>
-							</>
-						)}
 					</div>
 				</div>
 			</div>
-		</div>
+		</ApolloProvider>
 	);
 };
 

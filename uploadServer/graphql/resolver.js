@@ -6,11 +6,11 @@ const fs = require('fs');
 const resolvers = {
 	Upload: GraphQLUpload,
 
-    Query: {
-        getAllUsers:  () => {
-          return 'Hello World';
-        },
-      },
+	Query: {
+		getAllUsers: () => {
+			return 'Hello World';
+		},
+	},
 
 	Mutation: {
 		uploadFile: async (_, args) => {
@@ -19,7 +19,7 @@ const resolvers = {
 			const { ext, name } = path.parse(filename);
 
 			const stream = createReadStream();
-			imageName = `srs-${Date.now() + Math.random() * 100}${ext}`;
+			imageName = `image-${Date.now() + Math.random() * 100}${ext}`;
 			const pathName = path.join(
 				process.cwd(),
 				'..',

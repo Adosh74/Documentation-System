@@ -27,6 +27,8 @@ server
 		// allow cross origin requests from the frontend server
 		// app.use(cors());
 
+		app.use(express.static('public'));
+
 		// enable file uploads in graphql
 		// app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 

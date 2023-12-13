@@ -4,6 +4,7 @@ import React from 'react';
 import styles from './Styles.module.css';
 
 interface ContentCard {
+	id: string;
 	title: string;
 	startDate: string;
 	endDate: string;
@@ -21,10 +22,13 @@ const Projects: React.FC<ContentCardListProps> = ({ cards }) => {
 				{cards.map((card, index) => (
 					<div className={styles.projectCard} key={index}>
 						<h2 className={styles.projectTitle}>{card.title}</h2>
-
-						<Link href="/sdlc">
-							<button className={styles.viewProject}>view Project</button>
-						</Link>
+						{card && card.id && (
+							<Link href={`/sdlc?projectId=${card.id}`}>
+								<button className={styles.viewProject}>
+									view Project
+								</button>
+							</Link>
+						)}
 
 						<p className={styles.date}>Start Date: {card.startDate}</p>
 						<p className={styles.date}>End Date: {card.endDate}</p>
