@@ -56,8 +56,6 @@ interface initiation {
 	project_manager?: string;
 	budget?: number;
 	scope?: string;
-	sdds?: sdd[];
-	srss?: srs[];
 }
 interface srs {
 	id?: string;
@@ -77,21 +75,22 @@ interface sdd {
 //        Example Data
 
 const InitiationProjectInfo: any = {
-	title: 'Initial Title',
-	startDate: new Date('2023-12-03'),
-	finishDate: new Date('2023-12-20'),
-	objectives: 'Initial Objectives',
-	projectManager: 'Initial Project Manager',
-	budget: 'Initial Budget',
-	scopeStatements: 'Initial Scope Statements',
+	id: data.project.id.id,
+	title: data.project.title,
+	startIn: data.project.startIn,
+	endIn: data.project.endIn,
+	objectives: data.project.objectives,
+	project_manager: data.project.project_manager,
+	budget: data.project.budget,
+	scope: data.project.scope,
 };
 const formattedInitiationProjectInfo = {
 	...InitiationProjectInfo,
-	startDate: InitiationProjectInfo.startDate
-		? InitiationProjectInfo.startDate.toISOString().split('T')[0]
+	startIn: InitiationProjectInfo.startIn
+		? InitiationProjectInfo.startIn.toISOString().split('T')[0]
 		: '',
-	finishDate: InitiationProjectInfo.finishDate
-		? InitiationProjectInfo.finishDate.toISOString().split('T')[0]
+	endIn: InitiationProjectInfo.endIn
+		? InitiationProjectInfo.endIn.toISOString().split('T')[0]
 		: '',
 };
 
@@ -112,7 +111,7 @@ const SDDProjectInfo: any = [
 //* /////////////////////////////////////////////////////////////////////// */
 
 const Sdlc: React.FC = () => {
-	const [projectInfo1, setProjectInfo1] = useState<any>(formattedInitiationProjectInfo);
+	const [projectInfo1, setProjectInfo1] = useState<any>();
 	const [projectInfo2, setProjectInfo2] = useState<any>(SRSProjectInfo);
 	const [projectInfo3, setProjectInfo3] = useState<any>(SDDProjectInfo);
 	// get params from url

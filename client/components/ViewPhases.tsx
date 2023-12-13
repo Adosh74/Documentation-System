@@ -4,13 +4,14 @@ import { useState } from 'react';
 import SDLC from './SDLC';
 
 interface initiation {
-	title: string;
-	startDate: Date;
-	finishDate: Date;
-	objectives: string;
-	projectManager: string;
-	budget: string;
-	scopeStatements: string;
+	id: string;
+	title?: string;
+	startIn?: Date;
+	endIn?: Date;
+	objectives?: string;
+	project_manager?: string;
+	budget?: number;
+	scope?: string;
 }
 interface srs {
 	introduction: string;

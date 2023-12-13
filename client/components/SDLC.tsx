@@ -1,22 +1,23 @@
 'use client';
 
-import Initiation from '@/components/Initiation';
 import ViewInitiation from '@/components/ViewInitiation';
 import React, { useState } from 'react';
-import SDD from './SDD';
-import SRS from './SRS';
 import styles from './Styles.module.css';
+import UpdateInitiation from './UpdateInitiation';
+import UpdateSDD from './UpdateSDD';
+import UpdateSRS from './UpdateSRS';
 import ViewSDD from './ViewSDD';
 import ViewSRS from './ViewSRS';
 
 interface initiation {
-	title: string;
-	startDate: Date;
-	finishDate: Date;
-	objectives: string;
-	projectManager: string;
-	budget: string;
-	scopeStatements: string;
+	id: string;
+	title?: string;
+	startIn?: Date;
+	endIn?: Date;
+	objectives?: string;
+	project_manager?: string;
+	budget?: number;
+	scope?: string;
 }
 interface srs {
 	introduction: string;
@@ -89,7 +90,10 @@ const SDLC: React.FC<Info> = ({
 		<div className={styles.view}>
 			<div>
 				{isEditing1 ? (
-					<Initiation onSave={handleSave1} initialProjectInfoo={projectInfo1} />
+					<UpdateInitiation
+						onSave={handleSave1}
+						initialProjectInfoo={projectInfo1}
+					/>
 				) : (
 					projectInfo1 && (
 						<ViewInitiation
@@ -102,7 +106,11 @@ const SDLC: React.FC<Info> = ({
 			</div>
 			<div>
 				{isEditing2 ? (
-					<SRS onSave={handleSave2} initialProjectInfoo={projectInfo2} />
+					<UpdateSRS
+						onSave={handleSave2}
+						initialProjectInfoo={projectInfo2}
+						projectId={''}
+					/>
 				) : (
 					projectInfo2 && (
 						<ViewSRS
@@ -115,7 +123,11 @@ const SDLC: React.FC<Info> = ({
 			</div>
 			<div style={{ marginBottom: '0em' }}>
 				{isEditing3 ? (
-					<SDD onSave={handleSave3} initialProjectInfoo={projectInfo3} />
+					<UpdateSDD
+						onSave={handleSave3}
+						initialProjectInfoo={projectInfo3}
+						projectId={''}
+					/>
 				) : (
 					projectInfo3 && (
 						<ViewSDD
