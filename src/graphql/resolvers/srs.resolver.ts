@@ -32,14 +32,22 @@ export const srsResolver = {
 	},
 	Mutation: {
 		// *** 3.resolver for the createSrs mutation *** //
-		async createSrs(_: any, { file, input }: Record<string, any>) {
-			const { createReadStream, filename } = await file;
-			const { ext, name } = path.parse(filename);
+		async createSrs(_: any, args: any) {
+			console.log('args', args);
 
-			const stream = createReadStream();
-			const imageName = `srs-${Date.now() + Math.random() * 100}${ext}`;
-			const pathName = path.join(process.cwd(), `/public/images/${imageName}`);
-			await stream.pipe(fs.createWriteStream(pathName));
+			const { input, file } = args;
+
+			let imageName = 'default.png';
+			// if (file) {
+			// 	const { createReadStream, filename } = await file;
+			// 	const { ext, name } = path.parse(filename);
+			// 	console.log('ext', ext);
+
+			// 	const stream = createReadStream();
+			// 	imageName = `srs-${Date.now() + Math.random() * 100}${ext}`;
+			// 	const pathName = path.join(process.cwd(), `/public/images/${imageName}`);
+			// 	await stream.pipe(fs.createWriteStream(pathName));
+			// }
 
 			return await createSrs({
 				intro: input.intro,

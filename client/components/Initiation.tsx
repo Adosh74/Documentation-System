@@ -33,6 +33,7 @@ const CreateProject = gql`
 `;
 
 interface ProjectInfo {
+	id?: string;
 	title: string;
 	startDate: Date | null;
 	finishDate: Date | null;
@@ -68,6 +69,7 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 	const [successMessage, setSuccessMessage] = useState<string>('');
 
 	const initialProjectInfo: ProjectInfo = initialProjectInfoo || {
+		id: '',
 		title: '',
 		startDate: null,
 		finishDate: null,
@@ -153,34 +155,34 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 			setErrorMessage('Please complete all required fields.');
 			return;
 		}
-		setSuccessMessage('saved successfully!');
-		setErrorMessage('');
-		onSave(projectInfo);
-		setDataSaved(true);
-		// try {
-		// 	// const data = await createProject({
-		// 	// 	variables: {
-		// 	// 		input: {
-		// 	// 			title: projectInfo.title,
-		// 	// 			startIn: projectInfo.startDate,
-		// 	// 			endIn: projectInfo.finishDate,
-		// 	// 			objectives: projectInfo.objectives,
-		// 	// 			project_manager: projectInfo.projectManager,
-		// 	// 			budget: projectInfo.budget * 1,
-		// 	// 			scope: projectInfo.scopeStatements,
-		// 	// 		},
-		// 	// 	},
-		// 	// });
-		// 	// console.log(data);
-		// 	// projectData = data;
-		// 	setSuccessMessage('saved successfully!');
-		// 	setErrorMessage('');
-		// 	onSave(projectInfo);
-		// 	setDataSaved(true);
-		// } catch (error) {
-		// 	setErrorMessage('Error saving project information.');
-		// 	console.error(error);
-		// }
+		// setSuccessMessage('saved successfully!');
+		// setErrorMessage('');
+		// onSave(projectInfo);
+		// setDataSaved(true);
+		try {
+			const data = await createProject({
+				variables: {
+					input: {
+						title: projectInfo.title,
+						startIn: projectInfo.startDate,
+						endIn: projectInfo.finishDate,
+						objectives: projectInfo.objectives,
+						project_manager: projectInfo.projectManager,
+						budget: projectInfo.budget * 1,
+						scope: projectInfo.scopeStatements,
+					},
+				},
+			});
+			console.log(data);
+			projectInfo.id = data.data.createProject.id;
+			setSuccessMessage('saved successfully!');
+			setErrorMessage('');
+			onSave(projectInfo);
+			setDataSaved(true);
+		} catch (error) {
+			setErrorMessage('Error saving project information.');
+			console.error(error);
+		}
 	};
 
 	return (
@@ -293,13 +295,13 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 						</div>
 					</div>
 				</div>
-				{dataSaved && (
+				{dataSaved && projectInfo.id && (
 					<SRS
 						onSave={() => {
 							return;
 						}}
 						initialProjectInfoo={SRSProjectInfo}
-						projectId={projectInfo.budget}
+						projectId={projectInfo.id}
 					/>
 				)}
 			</div>

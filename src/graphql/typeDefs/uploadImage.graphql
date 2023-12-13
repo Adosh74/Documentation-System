@@ -1,0 +1,9 @@
+scalar Upload
+
+type File {
+	imageName: String!
+}
+
+type Mutation {
+	uploadImage(image: Upload!): File!
+}
