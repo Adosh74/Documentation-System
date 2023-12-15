@@ -47,17 +47,17 @@ const Project = gql`
 	}
 `;
 
-interface initiation {
+export interface Iinitiation {
 	id: string;
 	title?: string;
-	startIn?: Date;
-	endIn?: Date;
+	startIn?: string;
+	endIn?: string;
 	objectives?: string;
 	project_manager?: string;
 	budget?: number;
 	scope?: string;
 }
-interface srs {
+export interface Isrs {
 	id?: string;
 	intro?: string;
 	purpose?: string;
@@ -67,53 +67,17 @@ interface srs {
 	use_case?: string;
 }
 
-interface sdd {
+export interface Isdd {
 	id?: string;
 	uml?: string[];
 }
 
-//        Example Data
-
-const InitiationProjectInfo: any = {
-	id: data.project.id.id,
-	title: data.project.title,
-	startIn: data.project.startIn,
-	endIn: data.project.endIn,
-	objectives: data.project.objectives,
-	project_manager: data.project.project_manager,
-	budget: data.project.budget,
-	scope: data.project.scope,
-};
-const formattedInitiationProjectInfo = {
-	...InitiationProjectInfo,
-	startIn: InitiationProjectInfo.startIn
-		? InitiationProjectInfo.startIn.toISOString().split('T')[0]
-		: '',
-	endIn: InitiationProjectInfo.endIn
-		? InitiationProjectInfo.endIn.toISOString().split('T')[0]
-		: '',
-};
-
-const SRSProjectInfo: any = {
-	introduction: 'Hello',
-	purposeOfSoftwareBeingDeveloped: 'purposeOfSoftwareBeingDeveloped',
-	intendedAudience: 'intendedAudience',
-	overallDescriptionOfTheSoftware: 'overallDescriptionOfTheSoftware',
-	systemFeaturesAndRequirements: 'systemFeaturesAndRequirements',
-	browserImage: '../icon.png',
-};
-
-const SDDProjectInfo: any = [
-	{ id: 1, file: '../icon.png', fileName: 'Database Design' },
-	{ id: 2, file: '../icon.png', fileName: 'UML Diagrams' },
-];
-
 //* /////////////////////////////////////////////////////////////////////// */
 
 const Sdlc: React.FC = () => {
-	const [projectInfo1, setProjectInfo1] = useState<any>();
-	const [projectInfo2, setProjectInfo2] = useState<any>(SRSProjectInfo);
-	const [projectInfo3, setProjectInfo3] = useState<any>(SDDProjectInfo);
+	// const [projectInfo1, setProjectInfo1] = useState<any>(InitiationProjectInfo);
+	// const [projectInfo2, setProjectInfo2] = useState<any>(SRSProjectInfo);
+	// const [projectInfo3, setProjectInfo3] = useState<any>(SDDProjectInfo);
 	// get params from url
 	const params = useSearchParams();
 	console.log('params', params.get('projectId'));
@@ -132,18 +96,64 @@ const Sdlc: React.FC = () => {
 		return <p>Error :</p>;
 	}
 
-	console.log('data.project', data.project);
-	console.log('data.project.srs', data.project.srss[0]);
-	console.log('data.project.sdd', data.project.sdds[0]);
+	// console.log('data.project', data.project);
+	// console.log('data.project.srs', data.project.srss[0]);
+	// console.log('data.project.sdd', data.project.sdds[0]);
+
+	// fill data in initiation and srs and sdd
+	const InitiationProjectInfoData: Iinitiation = {
+		id: data.project.id,
+		title: data.project.title,
+		startIn: new Date(data.project.startIn * 1).toString().split('T')[0],
+		endIn: new Date(data.project.endIn * 1).toString().split('T')[0],
+		objectives: data.project.objectives,
+		project_manager: data.project.project_manager,
+		budget: data.project.budget,
+		scope: data.project.scope,
+	};
+
+	const SRSProjectInfoData: Isrs = {
+		id: '',
+		intro: '',
+		purpose: '',
+		intended_audience: '',
+		description: '',
+		requirements: '',
+		use_case: '',
+	};
+
+	if (data.project.srss[0]) {
+		SRSProjectInfoData.id = data.project.srss[0].id;
+		SRSProjectInfoData.intro = data.project.srss[0].intro;
+		SRSProjectInfoData.purpose = data.project.srss[0].purpose;
+		SRSProjectInfoData.intended_audience = data.project.srss[0].intended_audience;
+		SRSProjectInfoData.description = data.project.srss[0].description;
+		SRSProjectInfoData.requirements = data.project.srss[0].requirements;
+		SRSProjectInfoData.use_case = data.project.srss[0].use_case;
+	}
+
+	const SDDProjectInfoData: Isdd = {
+		id: '',
+		uml: [],
+	};
+
+	if (data.project.sdds[0]) {
+		SDDProjectInfoData.id = data.project.sdds[0].id;
+		SDDProjectInfoData.uml = data.project.sdds[0].uml;
+	}
+
+	console.log('InitiationProjectInfoData', InitiationProjectInfoData);
+	console.log('SRSProjectInfoData', SRSProjectInfoData);
+	console.log('SDDProjectInfoData', SDDProjectInfoData);
 
 	return (
 		<ApolloProvider client={client}>
 			<div className={styles.body}>
 				<Header />
 				<ViewPhases
-					InitiationProjectInfo={projectInfo1}
-					SRSProjectInfo={projectInfo2}
-					SDDProjectInfo={projectInfo3}
+					InitiationProjectInfoData={InitiationProjectInfoData}
+					SRSProjectInfoData={SRSProjectInfoData}
+					SDDProjectInfoData={SDDProjectInfoData}
 				/>
 			</div>
 		</ApolloProvider>
