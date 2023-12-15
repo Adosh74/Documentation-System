@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
+import fs from 'fs';
 import { GraphQLResolveInfo } from 'graphql';
+import path from 'path';
 import { extractSelections } from '../utils/extractSelections';
 
 interface GetSddsArgs {
@@ -73,5 +75,11 @@ export const updateSdd = async ({ id, uml }: UpdateSddInput) => {
 /// ***  5. delete a sdd *** ///
 export const deleteSdd = async (id: string) => {
 	const sdd = await prisma.sDD.delete({ where: { id } });
+	// delete sdd uml from public/images
+	sdd.uml.forEach((uml) => {
+		const pathName = path.join(process.cwd(), `/public/images/${uml}`);
+		fs.unlinkSync(pathName);
+	});
+
 	return sdd;
 };
