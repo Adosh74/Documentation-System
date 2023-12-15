@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
+import fs from 'fs';
 import { GraphQLResolveInfo } from 'graphql';
+import path from 'path';
 import { extractSelections } from '../utils/extractSelections';
 
 interface GetSrssArgs {
@@ -111,5 +113,10 @@ export const deleteSrs = async (id: string) => {
 	const deletedSrs = await prisma.sRS.delete({
 		where: { id },
 	});
+
+	// delete the image from the public/images folder
+	const pathName = path.join(process.cwd(), `/public/images/${deletedSrs.use_case}`);
+	fs.unlinkSync(pathName);
+
 	return deletedSrs;
 };
