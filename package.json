@@ -1,0 +1,45 @@
+{
+  "name": "documentation-system",
+  "version": "1.0.0",
+  "description": "This app is where you will store your Software Development Life Cycle Documentation. This application includes some common phases of software development: Project Initiation, Planning, Requirements (Analysis), Design, Development, Testing, Deployment, and Maintenance. Each phase will have its own documentation. Each documentation will have its own files. Each file will have its own version. Each version will have its own content. Each content will have its own author. Each author will have its own name.",
+  "main": "none",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build:server": "cd server && npm i",
+    "build:client": "cd client && npm i",
+    "build:upload:server": "cd uploadServer && npm i",
+    "build": "npm i && npm-run-all --parallel build:server build:client build:upload:server",
+    "start:server": "cd server && npm run start:dev",
+    "start:client": "cd client && npm run dev",
+    "start:upload:server": "cd uploadServer && npm start",
+    "start": "npm-run-all --parallel start:server start:client start:upload:server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adosh74/Documentation-System.git"
+  },
+  "keywords": [
+    "Node.js",
+    "Express.js",
+    "TypeScript",
+    "GraphQL",
+    "Apollo",
+    "Server",
+    "Apollo",
+    "Client",
+    "PostgreSQL",
+    "Prisma",
+    "Next.js"
+  ],
+  "author": "Mohamed Shebl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adosh74/Documentation-System/issues"
+  },
+  "homepage": "https://github.com/Adosh74/Documentation-System#readme",
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
