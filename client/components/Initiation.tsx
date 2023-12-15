@@ -307,18 +307,6 @@ const Initiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) 
 									Reset
 								</button>
 							</div>
-							{dataSaved && (
-								<Link href="/sdlc">
-									<button
-										style={{
-											color: 'red',
-											backgroundColor: 'yellow',
-										}}
-									>
-										view Phase
-									</button>
-								</Link>
-							)}
 						</div>
 					</div>
 				</div>
