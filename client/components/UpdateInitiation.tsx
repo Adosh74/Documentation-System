@@ -1,5 +1,6 @@
 'use client';
 
+import { Iinitiation } from '@/app/sdlc/page';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { gql, useMutation } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
@@ -17,10 +18,11 @@ export const client = new ApolloClient({
 	cache: new InMemoryCache(),
 });
 
-// graphql mutation
-const CreateProject = gql`
-	mutation CreateProject($input: CreateProjectInput) {
-		createProject(input: $input) {
+// graphql mutation for update initiation
+
+const UpdateProject = gql`
+	mutation UpdateProject($updateProjectId: String!, $input: ProjectUpdateInput) {
+		updateProject(id: $updateProjectId, input: $input) {
 			id
 			title
 			startIn
@@ -33,54 +35,37 @@ const CreateProject = gql`
 	}
 `;
 
-interface ProjectInfo {
-	id?: string;
-	title: string;
-	startDate: Date | null;
-	finishDate: Date | null;
-	objectives: string;
-	projectManager: string;
-	budget: string;
-	scopeStatements: string;
-}
-
-const SRSProjectInfo = {
-	introduction: '',
-	purposeOfSoftwareBeingDeveloped: '',
-	intendedAudience: '',
-	overallDescriptionOfTheSoftware: '',
-	systemFeaturesAndRequirements: '',
-	browserImage: '',
-};
-
 interface InitiationProps {
-	onSave: (updatedInfo: ProjectInfo) => void;
-	initialProjectInfoo: ProjectInfo;
+	onSave: (updatedInfo: Iinitiation) => void;
+	initialProjectInfoo: Iinitiation;
 }
 // object pass to srs it have project id
 // export let projectData = {};
 
 const UpdateInitiation: React.FC<InitiationProps> = ({ onSave, initialProjectInfoo }) => {
 	// graph mutation
-	const [createProject] = useMutation(CreateProject, { client });
+
+	const [updateProject, { loading, error, data }] = useMutation(UpdateProject, {
+		client,
+	});
 
 	const [dataSaved, setDataSaved] = useState<boolean>(false);
 
 	const [errorMessage, setErrorMessage] = useState<string>('');
 	const [successMessage, setSuccessMessage] = useState<string>('');
 
-	const initialProjectInfo: ProjectInfo = initialProjectInfoo || {
+	const initialProjectInfo: Iinitiation = initialProjectInfoo || {
 		id: '',
 		title: '',
-		startDate: null,
-		finishDate: null,
+		startIn: '',
+		endIn: '',
 		objectives: '',
-		projectManager: '',
+		project_manager: '',
 		budget: '',
-		scopeStatements: '',
+		scope: '',
 	};
 
-	const [projectInfo, setProjectInfo] = useState<ProjectInfo>(initialProjectInfo);
+	const [projectInfo, setProjectInfo] = useState<Iinitiation>(initialProjectInfo);
 
 	useEffect(() => {
 		if (initialProjectInfoo) {
@@ -89,11 +74,11 @@ const UpdateInitiation: React.FC<InitiationProps> = ({ onSave, initialProjectInf
 	}, [initialProjectInfoo]);
 
 	const [startDate, setStartDate] = useState<Date | null>(
-		projectInfo.startDate ? new Date(projectInfo.startDate) : null
+		projectInfo.startIn ? new Date(projectInfo.startIn) : null
 	);
 
 	const [finishDate, setFinishDate] = useState<Date | null>(
-		projectInfo.finishDate ? new Date(projectInfo.finishDate) : null
+		projectInfo.endIn ? new Date(projectInfo.endIn) : null
 	);
 
 	const [startDateString, setStartDateString] = useState<string>(
@@ -104,11 +89,11 @@ const UpdateInitiation: React.FC<InitiationProps> = ({ onSave, initialProjectInf
 		finishDate ? finishDate.toISOString().split('T')[0] : ''
 	);
 
-	const handleInputChange = (key: keyof ProjectInfo, value: string) => {
-		if (key === 'startDate' || key === 'finishDate') {
+	const handleInputChange = (key: keyof Iinitiation, value: string) => {
+		if (key === 'startIn' || key === 'endIn') {
 			const dateValue = value ? new Date(value) : null;
 
-			if (key === 'startDate') {
+			if (key === 'startIn') {
 				setStartDate(dateValue);
 				setStartDateString(value);
 			} else {
@@ -116,7 +101,7 @@ const UpdateInitiation: React.FC<InitiationProps> = ({ onSave, initialProjectInf
 				setFinishDateString(value);
 			}
 		}
-		setProjectInfo((prevInfo) => ({
+		setProjectInfo((prevInfo: any) => ({
 			...prevInfo,
 			[key]: value,
 		}));
@@ -132,13 +117,13 @@ const UpdateInitiation: React.FC<InitiationProps> = ({ onSave, initialProjectInf
 			setFinishDateString('');
 		} else {
 			setStartDateString(
-				initialProjectInfoo?.startDate instanceof Date
-					? initialProjectInfoo.startDate.toISOString().split('T')[0]
+				initialProjectInfoo?.startIn
+					? new Date(initialProjectInfoo.startIn).toISOString().split('T')[0]
 					: ''
 			);
 			setFinishDateString(
-				initialProjectInfoo?.finishDate instanceof Date
-					? initialProjectInfoo.finishDate.toISOString().split('T')[0]
+				initialProjectInfoo?.endIn
+					? new Date(initialProjectInfoo.endIn).toISOString().split('T')[0]
 					: ''
 			);
 		}
@@ -146,39 +131,40 @@ const UpdateInitiation: React.FC<InitiationProps> = ({ onSave, initialProjectInf
 	const handleSave = async () => {
 		if (
 			!projectInfo.title ||
-			!projectInfo.startDate ||
-			!projectInfo.finishDate ||
+			!projectInfo.startIn ||
+			!projectInfo.endIn ||
 			!projectInfo.objectives ||
-			!projectInfo.projectManager ||
+			!projectInfo.project_manager ||
 			!projectInfo.budget ||
-			!projectInfo.scopeStatements
+			!projectInfo.scope
 		) {
 			setErrorMessage('Please complete all required fields.');
 			return;
 		}
-		// setSuccessMessage('saved successfully!');
-		// setErrorMessage('');
-		// onSave(projectInfo);
-		// setDataSaved(true);
+
 		try {
-			const data = await createProject({
+			const { data } = await updateProject({
 				variables: {
+					updateProjectId: projectInfo.id,
 					input: {
+						id: projectInfo.id,
 						title: projectInfo.title,
-						startIn: projectInfo.startDate,
-						endIn: projectInfo.finishDate,
+						startIn: new Date(projectInfo.startIn),
+						endIn: new Date(projectInfo.endIn),
 						objectives: projectInfo.objectives,
-						project_manager: projectInfo.projectManager,
+						project_manager: projectInfo.project_manager,
 						budget: projectInfo.budget * 1,
-						scope: projectInfo.scopeStatements,
+						scope: projectInfo.scope,
 					},
 				},
 			});
+			//
 			console.log(data);
-			projectInfo.id = data.data.createProject.id;
 			setSuccessMessage('saved successfully!');
 			setErrorMessage('');
 			onSave(projectInfo);
+			console.log(projectInfo);
+
 			setDataSaved(true);
 		} catch (error) {
 			setErrorMessage('Error saving project information.');
@@ -211,7 +197,7 @@ const UpdateInitiation: React.FC<InitiationProps> = ({ onSave, initialProjectInf
 									id="startDatePicker"
 									value={startDateString || ''}
 									onChange={(e) =>
-										handleInputChange('startDate', e.target.value)
+										handleInputChange('startIn', e.target.value)
 									}
 								/>
 							</label>
@@ -223,7 +209,7 @@ const UpdateInitiation: React.FC<InitiationProps> = ({ onSave, initialProjectInf
 									id="finishDatePicker"
 									value={finishDateString || ''}
 									onChange={(e) =>
-										handleInputChange('finishDate', e.target.value)
+										handleInputChange('endIn', e.target.value)
 									}
 								/>
 							</label>
@@ -240,10 +226,10 @@ const UpdateInitiation: React.FC<InitiationProps> = ({ onSave, initialProjectInf
 								Project Manager
 								<input
 									type="text"
-									value={projectInfo.projectManager}
+									value={projectInfo.project_manager}
 									onChange={(e) =>
 										handleInputChange(
-											'projectManager',
+											'project_manager',
 											e.target.value
 										)
 									}
@@ -262,12 +248,9 @@ const UpdateInitiation: React.FC<InitiationProps> = ({ onSave, initialProjectInf
 							<label>
 								Project Scope Statements
 								<textarea
-									value={projectInfo.scopeStatements}
+									value={projectInfo.scope}
 									onChange={(e) =>
-										handleInputChange(
-											'scopeStatements',
-											e.target.value
-										)
+										handleInputChange('scope', e.target.value)
 									}
 								/>
 							</label>
@@ -296,24 +279,6 @@ const UpdateInitiation: React.FC<InitiationProps> = ({ onSave, initialProjectInf
 						</div>
 					</div>
 				</div>
-				{dataSaved && projectInfo.id && (
-					<div>
-						<SRS
-							onSave={() => {
-								return;
-							}}
-							initialProjectInfoo={SRSProjectInfo}
-							projectId={projectInfo.id}
-						/>
-						<SDD
-							onSave={() => {
-								return;
-							}}
-							initialProjectInfoo={[]}
-							projectId={projectInfo.id}
-						/>
-					</div>
-				)}
 			</div>
 		</ApolloProvider>
 	);

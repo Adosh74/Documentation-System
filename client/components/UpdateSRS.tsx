@@ -1,3 +1,4 @@
+import { Isrs } from '@/app/sdlc/page';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { gql, useMutation } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
@@ -22,19 +23,6 @@ const clientUpload = new ApolloClient({
 });
 
 // graphql mutation for srs
-const CreateSRS = gql`
-	mutation CreateSrs($file: Upload, $input: CreateSrsInput!) {
-		createSrs(file: $file, input: $input) {
-			id
-			intro
-			purpose
-			intended_audience
-			description
-			use_case
-			requirements
-		}
-	}
-`;
 
 const UploadImageTwo = gql`
 	mutation UploadFile($file: Upload!) {
@@ -44,37 +32,33 @@ const UploadImageTwo = gql`
 	}
 `;
 
-const UploadImage = gql`
-	mutation UploadImage($image: Upload!) {
-		uploadImage(image: $image) {
-			imageName
+// update srs mutation
+const UpdateSrs = gql`
+	mutation UpdateSrs($updateSrsId: String!, $input: UpdateSrsInput!) {
+		updateSrs(id: $updateSrsId, input: $input) {
+			id
+			intro
+			purpose
+			intended_audience
+			description
+			requirements
+			use_case
 		}
 	}
 `;
 
-interface ProjectInfo {
-	introduction: string;
-	purposeOfSoftwareBeingDeveloped: string;
-	intendedAudience: string;
-	overallDescriptionOfTheSoftware: string;
-	systemFeaturesAndRequirements: string;
-	browserImage: string;
-}
-
 interface SRSProps {
-	onSave: (updatedInfo: ProjectInfo) => void;
-	initialProjectInfoo: ProjectInfo;
-	projectId: string;
+	onSave: (updatedInfo: Isrs) => void;
+	srsPhaseInfo: Isrs;
 }
 
-const UpdateSRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => {
+const UpdateSRS: React.FC<SRSProps> = ({ onSave, srsPhaseInfo }) => {
 	// graphql mutation
-	const [createSRS] = useMutation(CreateSRS, { client });
-	const [uploadImage] = useMutation(UploadImage, { client });
+	const [updateSrs] = useMutation(UpdateSrs, { client });
+
 	const [uploadFile] = useMutation(UploadImageTwo, { client: clientUpload });
 
 	// state for image upload file
-	const [fileTwo, setFileTwo] = useState<File | null>(null);
 
 	const [dataSaved, setDataSaved] = useState<boolean>(false);
 	const [browserImage, setBrowserImage] = useState<string>('');
@@ -87,7 +71,7 @@ const UpdateSRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId 
 				setBrowserImage(reader.result as string);
 			};
 			reader.readAsDataURL(file);
-			setFileTwo(file);
+
 			// console.log(file);
 			const { data } = await uploadFile({
 				variables: {
@@ -99,25 +83,26 @@ const UpdateSRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId 
 		}
 	};
 
-	const initialProjectInfo: ProjectInfo = initialProjectInfoo || {
-		introduction: '',
-		purposeOfSoftwareBeingDeveloped: '',
-		intendedAudience: '',
-		overallDescriptionOfTheSoftware: '',
-		systemFeaturesAndRequirements: '',
-		browserImage: '',
+	const srsInfo: Isrs = srsPhaseInfo || {
+		id: '',
+		intro: '',
+		purpose: '',
+		intended_audience: '',
+		description: '',
+		requirements: '',
+		use_case: '',
 	};
 
-	const [projectInfo, setProjectInfo] = useState<ProjectInfo>(initialProjectInfo);
+	const [projectInfo, setProjectInfo] = useState<Isrs>(srsInfo);
 
 	useEffect(() => {
-		if (initialProjectInfoo) {
-			setProjectInfo(initialProjectInfoo);
-			setBrowserImage(initialProjectInfoo.browserImage);
+		if (srsInfo) {
+			setProjectInfo(srsInfo);
+			setBrowserImage(srsInfo.use_case || '');
 		}
-	}, [initialProjectInfoo]);
+	}, [srsPhaseInfo]);
 
-	const handleInputChange = (key: keyof ProjectInfo, value: string) => {
+	const handleInputChange = (key: keyof Isrs, value: string) => {
 		setProjectInfo((prevInfo) => ({
 			...prevInfo,
 			[key]: value,
@@ -125,52 +110,53 @@ const UpdateSRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId 
 	};
 
 	const handleReset = () => {
-		setProjectInfo(initialProjectInfo);
+		setProjectInfo(srsInfo);
 		setProjectInfo((prevProjectInfo) => ({
 			...prevProjectInfo,
 			browserImage: '',
 		}));
-		setBrowserImage('' || initialProjectInfoo.browserImage);
+		setBrowserImage(srsInfo.use_case || '');
 		setSuccessMessage('');
 		setErrorMessage('');
 	};
 	const [errorMessage, setErrorMessage] = useState<string>('');
 	const [successMessage, setSuccessMessage] = useState<string>('');
 	const handleSave = async () => {
-		projectInfo.browserImage = browserImage;
+		projectInfo.use_case = browserImage;
 		setProjectInfo((prevProjectInfo) => ({
 			...prevProjectInfo,
 			browserImage,
 		}));
 		if (
-			!projectInfo.browserImage ||
-			!projectInfo.introduction ||
-			!projectInfo.purposeOfSoftwareBeingDeveloped ||
-			!projectInfo.intendedAudience ||
-			!projectInfo.overallDescriptionOfTheSoftware ||
-			!projectInfo.systemFeaturesAndRequirements
+			!projectInfo.use_case ||
+			!projectInfo.intro ||
+			!projectInfo.purpose ||
+			!projectInfo.intended_audience ||
+			!projectInfo.description ||
+			!projectInfo.requirements
 		) {
 			setErrorMessage('Please complete all required fields.');
 			return;
 		}
 		try {
 			console.log('waiting for mutation');
-			const { data } = await createSRS({
+
+			const { data } = await updateSrs({
 				variables: {
+					updateSrsId: projectInfo.id,
 					input: {
-						intro: projectInfo.introduction,
-						purpose: projectInfo.purposeOfSoftwareBeingDeveloped,
-						intended_audience: projectInfo.intendedAudience,
-						description: projectInfo.overallDescriptionOfTheSoftware,
-						requirements: projectInfo.systemFeaturesAndRequirements,
-						use_case: projectInfo.browserImage,
-						projectId: projectId,
+						intro: projectInfo.intro,
+						purpose: projectInfo.purpose,
+						intended_audience: projectInfo.intended_audience,
+						description: projectInfo.description,
+						requirements: projectInfo.requirements,
+						use_case: projectInfo.use_case,
 					},
-					// file: fileTwo,
 				},
 			});
 
 			console.log(data);
+			// console.log(projectInfo);
 
 			onSave(projectInfo);
 			setSuccessMessage('saved successfully!');
@@ -179,7 +165,6 @@ const UpdateSRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId 
 		} catch (error: any) {
 			setErrorMessage(error.message);
 			console.log(error);
-			setSuccessMessage('');
 		}
 	};
 
@@ -193,31 +178,28 @@ const UpdateSRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId 
 							<label>
 								Introduction
 								<textarea
-									value={projectInfo.introduction}
+									value={projectInfo.intro}
 									onChange={(e) =>
-										handleInputChange('introduction', e.target.value)
+										handleInputChange('intro', e.target.value)
 									}
 								/>
 							</label>
 							<label>
 								Purpose Of Software Being Developed
 								<textarea
-									value={projectInfo.purposeOfSoftwareBeingDeveloped}
+									value={projectInfo.purpose}
 									onChange={(e) =>
-										handleInputChange(
-											'purposeOfSoftwareBeingDeveloped',
-											e.target.value
-										)
+										handleInputChange('purpose', e.target.value)
 									}
 								/>
 							</label>
 							<label>
 								Intended Audience
 								<textarea
-									value={projectInfo.intendedAudience}
+									value={projectInfo.intended_audience}
 									onChange={(e) =>
 										handleInputChange(
-											'intendedAudience',
+											'intended_audience',
 											e.target.value
 										)
 									}
@@ -226,12 +208,9 @@ const UpdateSRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId 
 							<label>
 								Overall Description Of The Software
 								<textarea
-									value={projectInfo.overallDescriptionOfTheSoftware}
+									value={projectInfo.description}
 									onChange={(e) =>
-										handleInputChange(
-											'overallDescriptionOfTheSoftware',
-											e.target.value
-										)
+										handleInputChange('description', e.target.value)
 									}
 								/>
 							</label>
@@ -245,12 +224,9 @@ const UpdateSRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId 
 								[3] External Interface Requirement
 								<br />
 								<textarea
-									value={projectInfo.systemFeaturesAndRequirements}
+									value={projectInfo.requirements}
 									onChange={(e) =>
-										handleInputChange(
-											'systemFeaturesAndRequirements',
-											e.target.value
-										)
+										handleInputChange('requirements', e.target.value)
 									}
 								/>
 							</label>
@@ -266,7 +242,7 @@ const UpdateSRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId 
 							{browserImage && (
 								<div>
 									<img
-										src={browserImage}
+										src={`http://localhost:3001/images/${browserImage}`}
 										alt="Browser"
 										style={{ maxWidth: '100%' }}
 									/>

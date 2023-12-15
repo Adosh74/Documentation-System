@@ -1,3 +1,4 @@
+import { Isdd } from '@/app/sdlc/page';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { gql, useMutation } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
@@ -21,10 +22,11 @@ const clientUpload = new ApolloClient({
 	cache: new InMemoryCache(),
 });
 
-// mutation for Sdd
-const CreateSdd = gql`
-	mutation CreateSdd($input: CreateSddInput!) {
-		createSdd(input: $input) {
+// mutation for Sdd update
+
+const UpdateSdd = gql`
+	mutation UpdateSdd($updateSddId: String!, $input: UpdateSddInput!) {
+		updateSdd(id: $updateSddId, input: $input) {
 			id
 			uml
 		}
@@ -45,46 +47,42 @@ interface Document {
 	fileName: string;
 }
 interface SRSProps {
-	onSave: (updatedInfo: Document[]) => void;
-	initialProjectInfoo?: Document[] | undefined;
-	projectId: string;
+	onSave: (updatedInfo: Isdd) => void;
+	sddPhaseInfo: Isdd;
 }
 
-const UpdateSDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => {
+const UpdateSDD: React.FC<SRSProps> = ({ onSave, sddPhaseInfo }) => {
 	// use mutation for sdd
-	const [createSdd] = useMutation(CreateSdd, { client });
+	const [updateSdd] = useMutation(UpdateSdd, { client });
 	const [uploadFile] = useMutation(UploadImageTwo, { client: clientUpload });
 
 	const [dataSaved, setDataSaved] = useState<boolean>(false);
 	const [umls, setUmls] = useState<string[]>([]);
-	const [documents, setDocuments] = useState<Document[]>(
-		Array.isArray(initialProjectInfoo) ? initialProjectInfoo : []
+	const [documents, setDocuments] = useState<string[]>(
+		Array.isArray(sddPhaseInfo.uml) ? sddPhaseInfo.uml : []
 	);
 	const [newDocumentId, setNewDocumentId] = useState<number>(1);
 	const [successMessage, setSuccessMessage] = useState<string>('');
 	const [errorMessage, setErrorMessage] = useState<string>('');
 
 	useEffect(() => {
-		if (Array.isArray(initialProjectInfoo)) {
-			setDocuments(initialProjectInfoo);
-			setNewDocumentId(initialProjectInfoo.length + 1);
+		if (Array.isArray(sddPhaseInfo.uml)) {
+			setDocuments(sddPhaseInfo.uml);
+			setNewDocumentId(sddPhaseInfo.uml.length + 1);
 		}
-	}, [initialProjectInfoo]);
+	}, [sddPhaseInfo.uml]);
 
-	const handleFileChange = async (
-		e: React.ChangeEvent<HTMLInputElement>,
-		id: number
-	) => {
+	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (file) {
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				const updatedDocuments = documents.map((doc) =>
-					doc.id === id ? { ...doc, file: reader.result as string } : doc
-				);
-				setDocuments(updatedDocuments);
-			};
-			reader.readAsDataURL(file);
+			// const reader = new FileReader();
+			// reader.onloadend = () => {
+			// 	const updatedDocuments = documents.map((doc) =>
+			// 		doc.id === id ? { ...doc, file: reader.result as string } : doc
+			// 	);
+			// 	setDocuments(updatedDocuments);
+			// };
+			// reader.readAsDataURL(file);
 
 			const { data } = await uploadFile({
 				variables: {
@@ -97,12 +95,7 @@ const UpdateSDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId 
 	};
 
 	const handleAddNewDocument = () => {
-		const newDocument: Document = {
-			id: newDocumentId,
-			file: '',
-			fileName: '',
-		};
-		setDocuments([...documents, newDocument]);
+		setDocuments([...documents, '']);
 		setNewDocumentId(newDocumentId + 1);
 		setSuccessMessage('');
 		setErrorMessage('');
@@ -114,24 +107,33 @@ const UpdateSDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId 
 			return;
 		}
 
-		if (documents.some((doc) => !doc.file || !doc.fileName)) {
-			setErrorMessage('Please provide both file and fileName for all documents.');
-			return;
-		}
-
+		const umlResult = [...documents, ...umls].filter((doc) => doc !== '');
 		try {
-			const { data } = await createSdd({
+			const { data } = await updateSdd({
 				variables: {
+					updateSddId: sddPhaseInfo.id,
 					input: {
-						projectId,
-						uml: umls,
+						uml: umlResult,
 					},
 				},
 			});
+
+			// 	const { data } = await createSdd({
+			// 		variables: {
+			// 			input: {
+			// 				projectId,
+			// 				uml: umls,
+			// 			},
+			// 		},
+			// 	});
 			console.log('data', data);
 
-			console.log('Saved SDD Information:', documents);
-			onSave(documents);
+			// 	console.log('Saved SDD Information:', documents);
+			//  onSave(documents);
+
+			// console.log(data.updateSdd);
+			console.log(umlResult);
+
 			setSuccessMessage('SDD information saved successfully!');
 			setDataSaved(true);
 			setErrorMessage('');
@@ -142,7 +144,7 @@ const UpdateSDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId 
 	};
 
 	const handleReset = () => {
-		setDocuments(Array.isArray(initialProjectInfoo) ? initialProjectInfoo : []);
+		setDocuments(Array.isArray(sddPhaseInfo.uml) ? sddPhaseInfo.uml : []);
 		setNewDocumentId(1);
 
 		setSuccessMessage('');
@@ -155,52 +157,22 @@ const UpdateSDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId 
 				<div className={styles.phaseBody}>
 					<div className="p-5 text-center bg-image">
 						<div className={styles.container}>
-							<h2>System Design Document (SDD) {projectId}</h2>
+							<h2>System Design Document (SDD)</h2>
 							<h5 className={styles.prag}>
 								Insert documents as Images <br />
 								[UML Diagrams - Database Design - User Interface Design]
 							</h5>
-							{documents.map((doc) => (
-								<div key={doc.id}>
-									<label htmlFor={`fileNameInput-${doc.id}`}>
-										File Name
-									</label>
-									<input
-										type="text"
-										id={`fileNameInput-${doc.id}`}
-										value={doc.fileName}
-										onChange={(e) =>
-											setDocuments((prevDocuments) =>
-												prevDocuments.map((prevDoc) =>
-													prevDoc.id === doc.id
-														? {
-																...prevDoc,
-																fileName: e.target.value,
-														  }
-														: prevDoc
-												)
-											)
-										}
-									/>
-									<label htmlFor={`fileInput-${doc.id}`}>
+							{documents.map((doc, i) => (
+								<div key={i}>
+									<label htmlFor={`fileInput-${doc}`}>
 										Browser Image
 									</label>
 									<input
 										type="file"
-										id={`fileInput-${doc.id}`}
+										id={`fileInput-${doc}`}
 										accept="*/*"
-										onChange={(e) => handleFileChange(e, doc.id)}
+										onChange={(e) => handleFileChange(e)}
 									/>
-									{doc.file && (
-										<div>
-											<p>File Preview</p>
-											<img
-												src={doc.file}
-												alt={`Preview for ${doc.fileName}`}
-												style={{ maxWidth: '100%' }}
-											/>
-										</div>
-									)}
 								</div>
 							))}
 
