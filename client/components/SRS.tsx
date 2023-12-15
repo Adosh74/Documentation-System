@@ -64,7 +64,7 @@ interface ProjectInfo {
 interface SRSProps {
 	onSave: (updatedInfo: ProjectInfo) => void;
 	initialProjectInfoo: ProjectInfo;
-	projectId: string;
+	projectId: string | any;
 }
 
 const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => {
@@ -309,18 +309,6 @@ const SRS: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 									Reset
 								</button>
 							</div>
-							{dataSaved && (
-								<Link href="/sdlc">
-									<button
-										style={{
-											color: 'red',
-											backgroundColor: 'yellow',
-										}}
-									>
-										view Phase
-									</button>
-								</Link>
-							)}
 						</div>
 					</div>
 				</div>
