@@ -2,8 +2,9 @@
 
 1. [Introduction](#introduction)
 2. [Core Features](#core-features)
-3. [Technologies and Tools](#technologies-and-tools)
-4. [ERD](/docs/ERD.md)
+3. [Getting Started](#getting-started)
+4. [Technologies and Tools](#technologies-and-tools)
+5. [ERD](/docs/ERD.md)
 
 ## Introduction
 
@@ -20,6 +21,29 @@ This app is where you will store your Software Development Life Cycle Documentat
 -   Best practices for GraphQL API design.
 
 -   Scalable folder structure for GraphQL API design.
+
+## Getting Started
+``` bash
+# clone the repo
+git clone https://github.com/Adosh74/Documentation-System
+
+# Move to the project directory
+cd Documentation-System
+
+# install all dependencies.
+npm run build
+
+# sync prisma with database
+npm run prisma:deploy
+npm run prisma:generate
+# After that, fill the .env file with your database credentials
+
+# Start all processes with one command
+npm start
+
+# Now, you can access the the Next.js app on http://localhost:3000
+# And GraphQL Playground on http://localhost:3001/graphql
+```
 
 ## Technologies and Tools
 
