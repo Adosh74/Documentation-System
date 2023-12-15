@@ -39,7 +39,7 @@ const UploadImageTwo = gql`
 	}
 `;
 
-interface Document {
+export interface Document {
 	id: number;
 	file: string;
 	fileName: string;
@@ -47,7 +47,7 @@ interface Document {
 interface SRSProps {
 	onSave: (updatedInfo: Document[]) => void;
 	initialProjectInfoo?: Document[] | undefined;
-	projectId: string;
+	projectId: string | any;
 }
 
 const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => {
@@ -240,20 +240,6 @@ const SDD: React.FC<SRSProps> = ({ onSave, initialProjectInfoo, projectId }) => 
 									Reset
 								</button>
 							</div>
-							{dataSaved && (
-								<>
-									<Link href="/sdlc">
-										<button
-											style={{
-												color: 'red',
-												backgroundColor: 'yellow',
-											}}
-										>
-											View Phase
-										</button>
-									</Link>
-								</>
-							)}
 						</div>
 					</div>
 				</div>
