@@ -1,50 +1,26 @@
 'use client';
 
+import { Iinitiation, Isdd, Isrs } from '@/app/sdlc/page';
 import { useState } from 'react';
 import SDLC from './SDLC';
 
-interface initiation {
-	id: string;
-	title?: string;
-	startIn?: Date;
-	endIn?: Date;
-	objectives?: string;
-	project_manager?: string;
-	budget?: number;
-	scope?: string;
-}
-interface srs {
-	introduction: string;
-	purposeOfSoftwareBeingDeveloped: string;
-	intendedAudience: string;
-	overallDescriptionOfTheSoftware: string;
-	systemFeaturesAndRequirements: string;
-	browserImage: string;
-}
-
-interface sdd {
-	id: number;
-	file: string;
-	fileName: string;
-}
-
 interface Info {
-	InitiationProjectInfo: initiation;
-	SRSProjectInfo: srs;
-	SDDProjectInfo: sdd[];
+	InitiationProjectInfoData: Iinitiation;
+	SRSProjectInfoData: Isrs;
+	SDDProjectInfoData: Isdd;
 }
 
 const ViewPhases: React.FC<Info> = ({
-	InitiationProjectInfo,
-	SRSProjectInfo,
-	SDDProjectInfo,
+	InitiationProjectInfoData,
+	SRSProjectInfoData,
+	SDDProjectInfoData,
 }) => {
 	return (
 		<>
 			<SDLC
-				InitiationProjectInfo={InitiationProjectInfo}
-				SRSProjectInfo={SRSProjectInfo}
-				SDDProjectInfo={SDDProjectInfo}
+				InitiationProjectInfo={InitiationProjectInfoData}
+				SRSProjectInfo={SRSProjectInfoData}
+				SDDProjectInfo={SDDProjectInfoData}
 			/>
 		</>
 	);
