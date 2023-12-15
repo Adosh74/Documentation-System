@@ -29,6 +29,6 @@ input UpdateSddInput {
 
 type Mutation {
 	createSdd(input: CreateSddInput!): Sdd
-	updateSdd(id: String!, sdd: UpdateSddInput!): Sdd
+	updateSdd(id: String!, input: UpdateSddInput!): Sdd
 	deleteSdd(id: String!): Sdd
 }
