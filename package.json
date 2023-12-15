@@ -11,6 +11,8 @@
     "build:client": "cd client && npm i",
     "build:upload:server": "cd uploadServer && npm i",
     "build": "npm i && npm-run-all --parallel build:server build:client build:upload:server",
+    "prisma:deploy": "cd server && npx prisma migrate dev --name init",
+    "prisma:generate": "cd server && npx prisma generate", 
     "start:server": "cd server && npm run start:dev",
     "start:client": "cd client && npm run dev",
     "start:upload:server": "cd uploadServer && npm start",
