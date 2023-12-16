@@ -47,9 +47,9 @@ npm run prisma:generate
 # Start all processes with one command
 npm start
 
-# Now, you can access the the Next.js app on http://localhost:3000
-# And GraphQL Playground on http://localhost:3001/graphql
 ```
+- Now, you can access the the Next.js app on ```http http://localhost:3000```
+- And GraphQL Playground on ```http http://localhost:3001/graphql```
 
 ## Technologies and Tools
 
